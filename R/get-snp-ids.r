@@ -10,42 +10,33 @@ library(dplyr)
 library(stringr)
 
 
-#' main() the driver function for the script
-#' @param  csv_file_path A csv file (absolute)path  with data about snps and stats from different studies
-#' @param  ref_csv_file_path A csv refernce file (absolute)path 
-main <- function(csv_file_path, ref_csv_file_path) {
-  study_data <- fread("/home/data/nehil_combine_data/combine_gwas_vcf.csv", sep=",", sep2="auto", header=T, na.strings="NA",
-                         stringsAsFactors = FALSE, verbose =T)
-  ref_data <- fread("/home/data/nehil_combine_all_chromosome_ref_snps.tsv", sep="\t", header=T, na.strings="NA",
-                        stringsAsFactors = FALSE, verbose =T)
-  result_data <- get_snp_ids(study_data, ref_data)
-  result_data <- unique(result_data)
-  
-  write.table(x = result_data, file="/home/data/nehil_combine_study_snp_ids.tsv",quote = F, sep = "\t", row.names = F)
-  
-  combined_ref_data <- combine_files_in_dir("/home/data/kacper_ref_snp_list/tsv", col_names = c("chr_no","pos","snp_name","ref","alt")  )
-  write.table(x = combined_ref_data, file="/home/data/nehil_combine_all_chromosome_ref_snps.tsv",quote = F, sep = "\t", row.names = F)
-  
-}
-
 #' To get the snp ides of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele 
 #' using these conditions rows are joined between the two dataframes provided to this function
 #' @param  df1 A csv file (absolute)path  with data about snps and stats from different studies
 #' @param  ref_df A csv refernce file (absolute)path 
+#' @return returns a data table with all the ref. snp ids joined to each row
 
 get_snp_ids <- function(df1, ref_df) {
   str(df1)
   str(ref_df)
-#   setnames(df1 , "alt", "study_alt")
-  join1_data <- df1[1:dim(df1)[1]/2] %>%
-    inner_join(ref_df, by = c("chr_no" = "chr_no", "pos" = "pos", "ref" = "ref"))
-  join2_data <- df1[(dim(df1)[1]/2) +1 : dim(df1)[1]] %>%
-    inner_join(ref_df, by = c("chr_no" = "chr_no", "pos" = "pos", "ref" = "ref"))
-  return(rbind(join1_data,join2_data))
+# setnames(df1 , "alt", "study_alt")
+  setkey(df1, chr_no, pos, ref)
+  setkey(ref_df, chr_no, pos, ref)
+  result_df <- merge(x = df1, y = ref_df, all.x = T,
+                     by = c("chr_no" , "pos" , "ref"), suffixes=c(".study", ".ref"),
+                     allow.cartesian=TRUE)
+#   join1_data <- df1[1:dim(df1)[1]/2] %>%
+#     left_join(ref_df, by = c("chr_no" = "chr_no", "pos" = "pos", "ref" = "ref"))
+#   join2_data <- df1[((dim(df1)[1]/2) + 1) : dim(df1)[1]] %>%
+#     left_join(ref_df, by = c("chr_no" = "chr_no", "pos" = "pos", "ref" = "ref"))
+#   return(rbind(join1_data,join2_data))
+  return(result_df)
 }
 
 #' This function normalises the input string vector
 #' _ and small case output, no spaces, no . etc
+#' @param a character vector of names
+#' @return a normalised character vector of names
 norm_var_names <- function(vars, sep="_") {
   if (sep == ".") sep <- "\\."
   
@@ -100,6 +91,7 @@ norm_var_names <- function(vars, sep="_") {
 
 #' This function combines the files in the geiven directory
 #' The assumption is that it does not have a header (default)
+#' 
 combine_files_in_dir <- function(dir_path, header = F, col_names = NULL) {
   filename_list <- list.files(dir_path, full.names = T)
   
@@ -121,4 +113,44 @@ combine_files_in_dir <- function(dir_path, header = F, col_names = NULL) {
 }
 
 
+#' The function takes in the data frame after attaching snp ids from the ref. 
+#' using get_snp_ids(). The function computes the length of missing snp_name
+#' @param the dataframe df
+#' @return a dataframe with all missing snp names changed to pgi_dal_snp1,...
 
+generate_new_ids <- function(df) {
+  length_missing_ids <- length(df[is.na(alt.ref),pos])
+  df[is.na(alt.ref) & is.na(snp_name), snp_name := paste0("pgi_dal_snp",seq(1,length_missing_ids))]
+  return(df)
+}
+
+#' main() the driver function for the script
+#' @param  csv_file_path A csv file (absolute)path  with data about snps and stats from 
+#' different studies
+#' @param  ref_tsv_file_path A tsv refernce file (absolute)path 
+main <- function(in_csv_file_path, 
+                 in_ref_tsv_file_path, 
+                 out_snp_name_annotated_study_snps_file_path,
+                 in_ref_snps_dir,
+                 out_combine_ref_snp_tsv_file_path) {
+  study_data <- fread(in_csv_file_path, sep=",", sep2="auto", header=T, na.strings="NA",
+                      stringsAsFactors = FALSE, verbose =T)
+  ref_data <- fread(in_ref_tsv_file_path, sep="\t", header=T, na.strings="NA",
+                    stringsAsFactors = FALSE, verbose =T)
+  result_data <- get_snp_ids(study_data, ref_data)
+#   result_data <- unique(result_data)
+  result_data <- generate_new_ids(result_data)
+  write.table(x = result_data, file=out_snp_name_annotated_study_snps_file_path, quote = F, sep = "\t", row.names = F)
+  
+#   combined_ref_data <- combine_files_in_dir(in_ref_snps_dir, col_names = c("chr_no","pos","snp_name","ref","alt")  )
+#   write.table(x = combined_ref_data, file=out_combine_ref_snp_tsv_file_path,quote = F, sep = "\t", row.names = F)
+}
+
+
+
+main(in_csv_file_path = "/home/data/nehil_combine_data/combine_gwas_vcf.csv", 
+     in_ref_tsv_file_path = "/home/data/nehil_combine_all_chromosome_ref_snps.tsv",
+     out_snp_name_annotated_study_snps_file_path = "/home/data/nehil_snp_annotated_study_all_snp_ids.tsv",
+     in_ref_snps_dir = "/home/data/kacper_ref_snp_list/tsv",
+     out_combine_ref_snp_tsv_file_path = "/home/data/nehil_combine_all_chromosome_ref_snps.tsv"
+  )
