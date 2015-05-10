@@ -25,11 +25,6 @@ get_snp_ids <- function(df1, ref_df) {
   result_df <- merge(x = df1, y = ref_df, all.x = T,
                      by = c("chr_no" , "pos" , "ref"), suffixes=c(".study", ".ref"),
                      allow.cartesian=TRUE)
-#   join1_data <- df1[1:dim(df1)[1]/2] %>%
-#     left_join(ref_df, by = c("chr_no" = "chr_no", "pos" = "pos", "ref" = "ref"))
-#   join2_data <- df1[((dim(df1)[1]/2) + 1) : dim(df1)[1]] %>%
-#     left_join(ref_df, by = c("chr_no" = "chr_no", "pos" = "pos", "ref" = "ref"))
-#   return(rbind(join1_data,join2_data))
   return(result_df)
 }
 
@@ -124,11 +119,11 @@ generate_new_ids <- function(df) {
   return(df)
 }
 
-#' main() the driver function for the script
+#' execute_script() the driver function for the script
 #' @param  csv_file_path A csv file (absolute)path  with data about snps and stats from 
 #' different studies
 #' @param  ref_tsv_file_path A tsv refernce file (absolute)path 
-main <- function(in_csv_file_path, 
+execute_script <- function(in_csv_file_path, 
                  in_ref_tsv_file_path, 
                  out_snp_name_annotated_study_snps_file_path,
                  in_ref_snps_dir,
@@ -148,7 +143,7 @@ main <- function(in_csv_file_path,
 
 
 
-main(in_csv_file_path = "/home/data/nehil_combine_data/combine_gwas_vcf.csv", 
+execute_script(in_csv_file_path = "/home/data/nehil_combine_data/combine_gwas_vcf.csv", 
      in_ref_tsv_file_path = "/home/data/nehil_combine_all_chromosome_ref_snps.tsv",
      out_snp_name_annotated_study_snps_file_path = "/home/data/nehil_snp_annotated_study_all_snp_ids.tsv",
      in_ref_snps_dir = "/home/data/kacper_ref_snp_list/tsv",
