@@ -19,12 +19,14 @@ library(stringr)
 get_snp_ids <- function(df1, ref_df) {
   str(df1)
   str(ref_df)
+  print(sum(duplicated(df1)))
+  print(sum(duplicated(ref_df)))
 # setnames(df1 , "alt", "study_alt")
-  setkey(df1, chr_no, pos, ref)
-  setkey(ref_df, chr_no, pos, ref)
+  setkey(df1, chr_no, pos)
+  setkey(df1, chr_no, pos)
   result_df <- merge(x = df1, y = ref_df, all.x = T,
-                     by = c("chr_no" , "pos" , "ref"), suffixes=c(".study", ".ref"),
-                     allow.cartesian=TRUE)
+                     by = c("chr_no" , "pos" , "ref"), suffixes=c(".study", ".ref"))
+  result_dt2 <- left_join(df1, ref_df)
   return(result_df)
 }
 
@@ -114,7 +116,8 @@ combine_files_in_dir <- function(dir_path, header = F, col_names = NULL) {
 #' @return a dataframe with all missing snp names changed to pgi_dal_snp1,...
 
 generate_new_ids <- function(df) {
-  length_missing_ids <- length(df[is.na(alt.ref),pos])
+  df <- as.data.table(df)
+  length_missing_ids <- dim(df)[1]
   df[is.na(alt.ref) & is.na(snp_name), snp_name := paste0("pgi_dal_snp",seq(1,length_missing_ids))]
   return(df)
 }
@@ -131,9 +134,9 @@ execute_script <- function(in_csv_file_path,
   study_data <- fread(in_csv_file_path, sep=",", sep2="auto", header=T, na.strings="NA",
                       stringsAsFactors = FALSE, verbose =T)
   ref_data <- fread(in_ref_tsv_file_path, sep="\t", header=T, na.strings="NA",
-                    stringsAsFactors = FALSE, verbose =T)
+#                     stringsAsFactors = FALSE, verbose =T)
   result_data <- get_snp_ids(study_data, ref_data)
-#   result_data <- unique(result_data)
+  result_data <- unique(result_data)
   result_data <- generate_new_ids(result_data)
   write.table(x = result_data, file=out_snp_name_annotated_study_snps_file_path, quote = F, sep = "\t", row.names = F)
   
