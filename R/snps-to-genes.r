@@ -39,7 +39,6 @@ map_snps_to_gene <- function(genome_dt, ref_dt, window_size) {
 
 
 
-
-execute( in_genome_data_file_path = "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv",
-in_ref_gene_id_file_path = "/home/data/reference/77/cattle_gene_list-UMD3.1.77.txt",
-out_snps_in_genes_file_path = "/home/data/cattle_gene_level.tsv")
+# execute( in_genome_data_file_path = "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv",
+# in_ref_gene_id_file_path = "/home/data/reference/77/cattle_gene_list-UMD3.1.77.txt",
+# out_snps_in_genes_file_path = "/home/data/cattle_gene_level.tsv")

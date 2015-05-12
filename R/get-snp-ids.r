@@ -17,16 +17,16 @@ library(stringr)
 #' @return returns a data table with all the ref. snp ids joined to each row
 
 get_snp_ids <- function(df1, ref_df) {
-  str(df1)
-  str(ref_df)
-  print(sum(duplicated(df1)))
-  print(sum(duplicated(ref_df)))
-# setnames(df1 , "alt", "study_alt")
+  
+  df1 <- unique(df1, by=c("chr_no", "pos", "ref"))
+  ref_df <- unique(ref_df, by=c("chr_no", "pos", "ref"))
+  
   setkey(df1, chr_no, pos)
-  setkey(df1, chr_no, pos)
+  setkey(ref_df, chr_no, pos)
+  
   result_df <- merge(x = df1, y = ref_df, all.x = T,
                      by = c("chr_no" , "pos" , "ref"), suffixes=c(".study", ".ref"))
-  result_dt2 <- left_join(df1, ref_df)
+
   return(result_df)
 }
 
@@ -134,7 +134,8 @@ execute_script <- function(in_csv_file_path,
   study_data <- fread(in_csv_file_path, sep=",", sep2="auto", header=T, na.strings="NA",
                       stringsAsFactors = FALSE, verbose =T)
   ref_data <- fread(in_ref_tsv_file_path, sep="\t", header=T, na.strings="NA",
-#                     stringsAsFactors = FALSE, verbose =T)
+                    stringsAsFactors = FALSE, verbose =T)
+  
   result_data <- get_snp_ids(study_data, ref_data)
   result_data <- unique(result_data)
   result_data <- generate_new_ids(result_data)
@@ -145,10 +146,10 @@ execute_script <- function(in_csv_file_path,
 }
 
 
-
-execute_script(in_csv_file_path = "/home/data/nehil_combine_data/combine_gwas_vcf.csv", 
-     in_ref_tsv_file_path = "/home/data/nehil_combine_all_chromosome_ref_snps.tsv",
-     out_snp_name_annotated_study_snps_file_path = "/home/data/nehil_snp_annotated_study_all_snp_ids.tsv",
-     in_ref_snps_dir = "/home/data/kacper_ref_snp_list/tsv",
-     out_combine_ref_snp_tsv_file_path = "/home/data/nehil_combine_all_chromosome_ref_snps.tsv"
-  )
+# 
+# execute_script(in_csv_file_path = "/home/data/nehil_combine_data/combine_gwas_vcf.csv", 
+#      in_ref_tsv_file_path = "/home/data/nehil_combine_all_chromosome_ref_snps.tsv",
+#      out_snp_name_annotated_study_snps_file_path = "/home/data/nehil_snp_annotated_study_all_snp_ids.tsv",
+#      in_ref_snps_dir = "/home/data/kacper_ref_snp_list/tsv",
+#      out_combine_ref_snp_tsv_file_path = "/home/data/nehil_combine_all_chromosome_ref_snps.tsv"
+#   )
