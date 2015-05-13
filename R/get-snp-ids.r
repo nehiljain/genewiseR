@@ -20,7 +20,9 @@ get_snp_ids <- function(df1, ref_df) {
   
   df1 <- unique(df1, by=c("chr_no", "pos", "ref"))
   ref_df <- unique(ref_df, by=c("chr_no", "pos", "ref"))
-  
+  print(sum(duplicated(df1[, c("chr_no", "pos", "ref"), with=FALSE])))
+  print(sum(duplicated(ref_df[, c("chr_no", "pos", "ref"), with=FALSE])))
+
   setkey(df1, chr_no, pos)
   setkey(ref_df, chr_no, pos)
   
@@ -92,7 +94,7 @@ norm_var_names <- function(vars, sep="_") {
 combine_files_in_dir <- function(dir_path, header = F, col_names = NULL) {
   filename_list <- list.files(dir_path, full.names = T)
   
-
+  cat("Reading Init",)
   combine_data <- fread(filename_list[[1]], sep="\t", header = header, na.strings="NA",
                              stringsAsFactors = FALSE, verbose =T)
   if (is.null(header) & is.null(col_names)) {
@@ -100,10 +102,12 @@ combine_files_in_dir <- function(dir_path, header = F, col_names = NULL) {
     col_names <- seq(1:dim(combine_data)[1], by=1)
   }
   for(l in filename_list) {
+    cat("reading:",l)
     data <- fread(l, sep="\t", header = header, na.strings="NA",
                   stringsAsFactors = FALSE, verbose =T)
     combine_data <- rbind(combine_data, data)
   }
+  cat("reading over",l)
   combine_data <- unique(combine_data)
   setnames(combine_data, names(combine_data), norm_var_names(col_names))
   return(combine_data)
@@ -141,8 +145,8 @@ execute_script <- function(in_csv_file_path,
   result_data <- generate_new_ids(result_data)
   write.table(x = result_data, file=out_snp_name_annotated_study_snps_file_path, quote = F, sep = "\t", row.names = F)
   
-  combined_ref_data <- combine_files_in_dir(in_ref_snps_dir, col_names = c("chr_no","pos","snp_name","ref","alt")  )
-  write.table(x = combined_ref_data, file=out_combine_ref_snp_tsv_file_path,quote = F, sep = "\t", row.names = F)
+#   combined_ref_data <- combine_files_in_dir(in_ref_snps_dir, col_names = c("chr_no","pos","snp_name","ref","alt")  )
+#   write.table(x = combined_ref_data, file=out_combine_ref_snp_tsv_file_path,quote = F, sep = "\t", row.names = F)
 }
 
 
