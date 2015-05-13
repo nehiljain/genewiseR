@@ -121,7 +121,7 @@ combine_files_in_dir <- function(dir_path, header = F, col_names = NULL) {
 
 generate_new_ids <- function(df) {
   df <- as.data.table(df)
-  length_missing_ids <- dim(df)[1]
+  length_missing_ids <- dim(df[is.na(alt.ref) & is.na(snp_name)])[1]
   custom_names <- rep("pgi_dal_snp", length_missing_ids)
   custom_names <- paste0(custom_names, seq(1,length_missing_ids))
   df[is.na(alt.ref) & is.na(snp_name), snp_name := custom_names]
