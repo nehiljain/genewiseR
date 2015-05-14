@@ -23,11 +23,11 @@ bonferroni_correction_genomewide <- function (in_un_adj_p_val_snps_data_file_pat
 }
 
 
-library(qvalue)
 
-#' This function is the main driver of the other functions. 
-execute_script <- function () {
-  bonferroni_correction_genomewide("/home/data/nehil_snp_annotated_study_all_snp_ids.tsv", 
-                                   "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv", c("cc_geno","cc_trend"))
-}
+
+# #' This function is the main driver of the other functions. 
+# execute_script <- function () {
+#   bonferroni_correction_genomewide("/home/data/nehil_snp_annotated_study_all_snp_ids.tsv", 
+#                                    "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv", c("cc_geno","cc_trend"))
+# }
 
