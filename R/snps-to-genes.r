@@ -13,10 +13,10 @@ execute <- function (in_genome_data_file_path, in_ref_gene_id_file_path, out_snp
   print(names(ref_gene_id_data))
   print(str(ref_gene_id_data))
   
-  setnames(genome_data,names(genome_data),norm_var_names(names(genome_data)))
+  setnames(genome_data,names(genome_data),genewise::norm_var_names(names(genome_data)))
   col_names <- c("chr_no","source","feature_type","gene_start_bp","gene_end_bp","")
   
-  setnames(ref_gene_id_data,names(ref_gene_id_data), norm_var_names(names(ref_gene_id_data)))
+  setnames(ref_gene_id_data,names(ref_gene_id_data), genewise::norm_var_names(names(ref_gene_id_data)))
   ref_gene_id_data <- ref_gene_id_data[chromosome_name %in% chr_list] 
   ref_gene_id_data[,chromosome_name := as.factor(chromosome_name)]
 
