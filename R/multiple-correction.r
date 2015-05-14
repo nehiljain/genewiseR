@@ -12,7 +12,7 @@ window_size <- 1000
 
 p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, out_genome_p_adj_file_path, col_names) {
   snp_stats_dt <- fread(in_un_adj_p_val_snps_data_file_path, sep="\t", sep2="auto", header=T, na.strings="NA",
-                          stringsAsFactors = FALSE, verbose =T, nrow=100000)
+                          stringsAsFactors = FALSE, verbose =T)
   length_dt <- dim(snp_stats_dt)[1]
   for (ch in col_names) {
     print(ch)
