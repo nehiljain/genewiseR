@@ -10,12 +10,16 @@ execute <- function (in_genome_data_file_path, in_ref_gene_id_file_path, out_snp
                        stringsAsFactors=FALSE, verbose=TRUE)
   ref_gene_id_data <- fread(in_ref_gene_id_file_path, sep=",", sep2="auto", na.strings="NA",
                             stringsAsFactors=FALSE, verbose=TRUE)
+  print(names(ref_gene_id_data))
+  print(str(ref_gene_id_data))
+  
   setnames(genome_data,names(genome_data),norm_var_names(names(genome_data)))
   col_names <- c("chr_no","source","feature_type","gene_start_bp","gene_end_bp","")
   
   setnames(ref_gene_id_data,names(ref_gene_id_data), norm_var_names(names(ref_gene_id_data)))
   ref_gene_id_data <- ref_gene_id_data[chromosome_name %in% chr_list] 
   ref_gene_id_data[,chromosome_name := as.factor(chromosome_name)]
+
   setnames(ref_gene_id_data, c("chromosome_name","gene_start_(bp)", "gene_end_(bp)"), c("chr_no","gene_start", "gene_end"))
   result_dt <- map_snps_to_gene(genome_data, ref_gene_id_data, window_size)
   write.table(result_dt, out_snps_in_genes_file_path, sep="\t", row.names=F, quote = F)
