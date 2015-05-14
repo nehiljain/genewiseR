@@ -17,7 +17,7 @@ p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, out_ge
   for (ch in col_names) {
     print(ch)
     adj_name <- paste0(ch,".p_adjusted")
-    snp_stats_dt[, (adj_name) := p.adjust(get(b), "fdr", length_dt)]
+    snp_stats_dt[, (adj_name) := p.adjust(get(ch), "fdr", length_dt)]
   }
   write.table(x = snp_stats_dt, file=out_genome_p_adj_file_path, quote = F, sep = "\t", row.names = F)
 }
@@ -26,8 +26,8 @@ p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, out_ge
 
 
 # #' This function is the main driver of the other functions. 
-# execute_script <- function () {
-#   bonferroni_correction_genomewide("/home/data/nehil_snp_annotated_study_all_snp_ids.tsv", 
-#                                    "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv", c("cc_geno","cc_trend"))
-# }
+execute_script <- function () {
+  p_adjustment_genomewide("/home/data/nehil_snp_annotated_study_all_snp_ids.tsv", 
+                                   "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv", c("cc_geno","cc_trend"))
+}
 
