@@ -10,11 +10,11 @@ window_size <- 1000
 #' @param SNP p value stats data table
 #' @return Datable with additional columns for genomewide correction of each column vector
 
-bonferroni_correction_genomewide <- function (in_un_adj_p_val_snps_data_file_path, out_genome_p_adj_file_path) {
+p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, out_genome_p_adj_file_path, col_names) {
   snp_stats_dt <- fread(in_un_adj_p_val_snps_data_file_path, sep="\t", sep2="auto", header=T, na.strings="NA",
                           stringsAsFactors = FALSE, verbose =T, nrow=100000)
   length_dt <- dim(snp_stats_dt)[1]
-  for (ch in p_val_character) {
+  for (ch in col_names) {
     print(ch)
     adj_name <- paste0(ch,".p_adjusted")
     snp_stats_dt[, (adj_name) := p.adjust(get(b), "fdr", length_dt)]
