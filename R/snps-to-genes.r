@@ -11,12 +11,17 @@ execute <- function (in_genome_data_file_path, in_ref_gene_id_file_path, out_snp
   ref_gene_id_data <- fread(in_ref_gene_id_file_path, sep=",", sep2="auto", na.strings="NA",
                             stringsAsFactors=FALSE, verbose=TRUE)
   print(names(ref_gene_id_data))
-  print(str(ref_gene_id_data))
   
-  setnames(genome_data,names(genome_data),genewise::norm_var_names(names(genome_data)))
-  col_names <- c("chr_no","source","feature_type","gene_start_bp","gene_end_bp","")
-  
-  setnames(ref_gene_id_data,names(ref_gene_id_data), genewise::norm_var_names(names(ref_gene_id_data)))
+#   setnames(genome_data,names(genome_data),norm_var_names(names(genome_data)))
+  col_names <- c("chr_no","source","feature_type","gene_start_bp","gene_end_bp")
+  genome_data[,chr_no := as.factor(chr_no)]
+
+#   setnames(ref_gene_id_data,names(ref_gene_id_data), norm_var_names(names(ref_gene_id_data)))
+  setnames(ref_gene_id_data, 
+           names(ref_gene_id_data), 
+           c("ensemble_gene_id","description", "chromosome_name", "gene_start_(bp)", "gene_end_(bp)", "strand","band"
+             ,"associated_gene_name", "associated_gene_source","gene_biotype","source","status","version"))
+#   print(names(ref_gene_id_data))
   ref_gene_id_data <- ref_gene_id_data[chromosome_name %in% chr_list] 
   ref_gene_id_data[,chromosome_name := as.factor(chromosome_name)]
 
@@ -34,15 +39,15 @@ execute <- function (in_genome_data_file_path, in_ref_gene_id_file_path, out_snp
 map_snps_to_gene <- function(genome_dt, ref_dt, window_size) {
   genome_dt[, fake_gene_start := pos]
   genome_dt[, fake_gene_end := pos]
-  ref_gene_id_data[, fake_gene_start := (gene_start - window_size)]
-  ref_gene_id_data[, fake_gene_end := (gene_start + window_size)]
-  setkey(ref_gene_id_data, chr_no, fake_gene_start, fake_gene_end)
-  result_dt <- foverlaps(genome_data, ref_gene_id_data, type="within", nomatch = 0L)
+  ref_dt[, fake_gene_start := (gene_start - window_size)]
+  ref_dt[, fake_gene_end := (gene_start + window_size)]
+  setkey(ref_dt, chr_no, fake_gene_start, fake_gene_end)
+  result_dt <- foverlaps(genome_dt, ref_dt, type="within", nomatch = 0L)
   return(result_dt)
 } 
 
 
-
+# 
 # execute( in_genome_data_file_path = "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv",
 # in_ref_gene_id_file_path = "/home/data/reference/77/cattle_gene_list-UMD3.1.77.txt",
 # out_snps_in_genes_file_path = "/home/data/cattle_gene_level.tsv")
