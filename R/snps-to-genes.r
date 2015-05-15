@@ -40,8 +40,8 @@ execute <- function (in_genome_data_file_path, sep1,
 #' @param window_size
 #' @return a dt with all snps in genes
 map_snps_to_gene <- function(genome_dt, ref_dt, window_size) {
-  genome_dt[, fake_gene_start := pos]
-  genome_dt[, fake_gene_end := pos]
+  genome_dt[, fake_gene_start := snp_pos]
+  genome_dt[, fake_gene_end := snp_pos]
   ref_dt[, fake_gene_start := (gene_start - window_size)]
   ref_dt[, fake_gene_end := (gene_start + window_size)]
   setkey(ref_dt, chr_no, fake_gene_start, fake_gene_end)
