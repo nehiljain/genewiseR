@@ -2,20 +2,23 @@
 library(data.table)
 library(stringr)
 
+#NOTE: NEHIL NEEDS TO CHANGE NORM_VAR_NAMES FUNCTION
 
 
-execute <- function (in_genome_data_file_path, in_ref_gene_id_file_path, out_snps_in_genes_file_path, window_size = 1000) {
+execute <- function (in_genome_data_file_path, sep1, 
+                     in_ref_gene_id_file_path, sep2, 
+                     out_snps_in_genes_file_path, sep3, 
+                     window_size = 1000) {
   chr_list <- as.character(c(1:29,"X"))
-  genome_data <- fread(in_genome_data_file_path, sep="\t", sep2="auto", header=T, na.strings="NA",
-                       stringsAsFactors=FALSE, verbose=TRUE)
-  ref_gene_id_data <- fread(in_ref_gene_id_file_path, sep=",", sep2="auto", na.strings="NA",
-                            stringsAsFactors=FALSE, verbose=TRUE)
-  print(names(ref_gene_id_data))
-  
+
+  genome_data <- fread(in_genome_data_file_path, sep=sep1, sep2="auto", header=T, na.strings="NA",
+                       stringsAsFactors=FALSE, verbose=TRUE)  
 #   setnames(genome_data,names(genome_data),norm_var_names(names(genome_data)))
   col_names <- c("chr_no","source","feature_type","gene_start_bp","gene_end_bp")
   genome_data[,chr_no := as.factor(chr_no)]
-
+  
+  ref_gene_id_data <- fread(in_ref_gene_id_file_path, sep=sep2, sep2="auto", na.strings="NA",
+                          stringsAsFactors=FALSE, verbose=TRUE)
 #   setnames(ref_gene_id_data,names(ref_gene_id_data), norm_var_names(names(ref_gene_id_data)))
   setnames(ref_gene_id_data, 
            names(ref_gene_id_data), 
@@ -27,7 +30,7 @@ execute <- function (in_genome_data_file_path, in_ref_gene_id_file_path, out_snp
 
   setnames(ref_gene_id_data, c("chromosome_name","gene_start_(bp)", "gene_end_(bp)"), c("chr_no","gene_start", "gene_end"))
   result_dt <- map_snps_to_gene(genome_data, ref_gene_id_data, window_size)
-  write.table(result_dt, out_snps_in_genes_file_path, sep="\t", row.names=F, quote = F)
+  write.table(result_dt, out_snps_in_genes_file_path, sep=sep3, row.names=F, quote = F)
 }
 
 #' The function gets genome data.table and reference data table
