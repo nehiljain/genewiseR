@@ -63,6 +63,7 @@ get_quartile <- function(df, column_name) {
     cat("\n\nlast quartile\n\n",last_quartile)
     cat("\n\nlevels of quartiles\n\n",levels(df$quartile))
     df$quartile_ch <- as.character(df$quartile)
+    names(df)
     df <- filter(df, as.character(quartile_ch) == as.character(last_quartile))
     cat("\n\ndf after fildering\n\n",str(df))
   }
