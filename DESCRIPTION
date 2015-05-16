@@ -10,4 +10,5 @@ Imports:
     dplyr,
     data.table,
     stringr,
-    Hmisc
+    Hmisc,
+    plyr

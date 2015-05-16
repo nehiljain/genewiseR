@@ -16,7 +16,6 @@ execute <- function (in_genome_data_file_path, sep1,
                        stringsAsFactors=FALSE, verbose=TRUE)  
 #   setnames(genome_data,names(genome_data),norm_var_names(names(genome_data)))
 
-#   genome_data[,chr_no := as.factor(chr_no)]
   
   ref_gene_id_data <- fread(in_ref_gene_id_file_path, sep=sep2, sep2="auto", na.strings="NA",
                           stringsAsFactors=FALSE, verbose=TRUE)
@@ -26,8 +25,7 @@ execute <- function (in_genome_data_file_path, sep1,
            c("ensemble_gene_id","description", "chromosome_name", "gene_start_(bp)", "gene_end_(bp)", "strand","band"
              ,"associated_gene_name", "associated_gene_source","gene_biotype","source","status","version"))
   print(names(ref_gene_id_data))
-  ref_gene_id_data <- ref_gene_id_data[chromosome_name %in% chr_list] 
-#   ref_gene_id_data[,chromosome_name := as.factor(chromosome_name)]
+  ref_gene_id_data <- ref_gene_id_data[chromosome_name %in% chr_list]
 
   setnames(ref_gene_id_data, c("chromosome_name","gene_start_(bp)", "gene_end_(bp)"), c("chr_no","gene_start", "gene_end"))
   result_dt <- map_snps_to_gene(genome_data, ref_gene_id_data, window_size)
@@ -51,12 +49,12 @@ map_snps_to_gene <- function(genome_dt, ref_dt, window_size) {
   return(result_dt)
 } 
 
-in_genome_data_file_path = "/home/kasia/coderepo/genewise/p_adjusted_genome.gwas"
-sep1 = ","
-in_ref_gene_id_file_path = "/home/data/tmp/mouse_gene_list-GRCm38.77-mm10.txt"
-sep2 = ","
-out_snps_in_genes_file_path="/home/data/tmp/all_snps_in_genes.tsv"
-sep3="\t"
+# in_genome_data_file_path = "/home/kasia/coderepo/genewise/p_adjusted_genome.gwas"
+# sep1 = ","
+# in_ref_gene_id_file_path = "/home/data/tmp/mouse_gene_list-GRCm38.77-mm10.txt"
+# sep2 = ","
+# out_snps_in_genes_file_path="/home/data/tmp/all_snps_in_genes.tsv"
+# sep3="\t"
 
 
 
