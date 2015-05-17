@@ -2,6 +2,10 @@ library(Hmisc)
 
 #' if the out file path is not given then it returns the datatable else writes a tsv on the new path
 get_significant_snps <- function(df, threshold, column_name, out_file_path = NULL) {
+  
+  see_if(is.number(threshold))
+  expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
+  
   signifant_df <- df[get(column_name) < threshold]
   if (is.null(out_file_path)) {
     return(signifant_df)
@@ -15,6 +19,10 @@ get_significant_snps <- function(df, threshold, column_name, out_file_path = NUL
 
 #' if the out file path is not given then it returns the datatable else writes a tsv on the new path
 get_nlp <- function(df, column_name, out_file_path = NULL) {
+  
+  expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
+  
+  
   nlp_column <- paste0(column_name, ".nlp")
   df[, (nlp_column) := -1 * log10(get(column_name))]
   if (is.null(out_file_path)) {
@@ -28,6 +36,9 @@ get_nlp <- function(df, column_name, out_file_path = NULL) {
 #' calculates snp count, max and mean on given column name and groups all the counts by chromosome
 #' if the out file path is not given then it returns the datatable else writes a tsv on the new path
 get_max_and_mean <- function(df, column_name, out_file_path = NULL) { 
+  
+  expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
+  
   max_column <- paste0( "chr_max_",column_name)
   mean_column <- paste0( "chr_mean_",column_name)
   
@@ -48,8 +59,11 @@ get_max_and_mean <- function(df, column_name, out_file_path = NULL) {
 
 
 get_quartile <- function(df, column_name) {
+  
+  expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
+  
   df <- as.data.frame(df)
-  if (dim(df)[1] == 1) {
+  if (dim(df)[1] == 1 | length(unique(df[,column_name])) == 1) {
     
     df$quartile <- df[,column_name]
     
@@ -68,16 +82,24 @@ get_quartile <- function(df, column_name) {
     cat("\n\ndf after fildering\n\n",str(df))
   }
   df <- as.data.table(df)
-#   cat("\n\nbefore mean of all\n\n",str(df))
+  cat("\n\nbefore mean of all\n\n",str(df))
   df[, topQ_nlp := mean(get(column_name), na.rm = TRUE)]
   df <- df[, .(ensemble_gene_id, topQ_nlp)]
+  
+  
+  cat("\n\\n\n\n\n\n\n\n\n\nEND\n\n")
+  
+  
   return(df)
 }
 
 
 get_topQ <- function(df, column_name, out_file_path = NULL) {
+  
+  expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
+  
   result_sign_snp_topq_df <- ddply(df, "ensemble_gene_id", function(df) {
-    #   print(str(df))
+      print(str(df))
     return(get_quartile(df, column_name))
   })
   
