@@ -58,7 +58,7 @@ p_adjustment_chrwide <- function (in_un_adj_p_val_snps_data_file_path, out_genom
 
 # # #' This function is the main driver of the other functions. 
 # execute_script <- function () {
-  p_adjustment_genomewide("/home/data/nehil_snp_annotated_study_all_snp_ids.tsv", 
-                                   "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv", c("cc_trend"))
+#   p_adjustment_genomewide("/home/data/nehil_snp_annotated_study_all_snp_ids.tsv", 
+#                                    "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv", c("cc_trend"))
 # }
 

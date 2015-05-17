@@ -6,7 +6,8 @@
 the column name is p_adj_genome. COLUMN required cmh_p_val}
 \usage{
 p_adjustment_chrwide(in_un_adj_p_val_snps_data_file_path,
-  out_genome_p_adj_file_path, col_names)
+  out_genome_p_adj_file_path, col_names = c("cmh_p_val"),
+  p_adj_method = "fdr")
 }
 \arguments{
 \item{SNP}{p value stats data table}

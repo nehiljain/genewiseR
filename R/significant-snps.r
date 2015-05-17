@@ -45,6 +45,7 @@ get_max_and_mean <- function(df, column_name, out_file_path = NULL) {
   df [, (max_column) := max(get(column_name)), by="ensemble_gene_id"]
   df [, (mean_column) := mean(get(column_name)),  by="ensemble_gene_id"]
   df [, snp_count := .N,  by="ensemble_gene_id"]
+  
   #tricky step
   df <- unique(df[,.(ensemble_gene_id, maxT = get(max_column), meanT = get(mean_column), snp_count)])
   

@@ -5,7 +5,8 @@ library(stringr)
 #NOTE: NEHIL NEEDS TO CHANGE NORM_VAR_NAMES FUNCTION
 #NOTE: Nehil remove your fake gene start and end columns and cleanup names before writing in all cases. 
 
-#' @example: execute( in_genome_data_file_path = "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv", sep='\t'
+
+#' pgi_execute_map_snp_to_genes( in_genome_data_file_path = "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv", 
 #' in_ref_gene_id_file_path = "/home/data/reference/77/cattle_gene_list-UMD3.1.77.txt",
 #' out_snps_in_genes_file_path = "/home/data/cattle_gene_level.tsv")
 

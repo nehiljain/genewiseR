@@ -2,23 +2,21 @@
 % Please edit documentation in R/snps-to-genes.r
 \name{map_snps_to_gene}
 \alias{map_snps_to_gene}
-\title{The function gets genome data.table and reference data table
-It finds all the snps in genome that are in  gene +/- window_size}
+\title{It finds all the snps in genome that are in  gene +/- window_size}
 \usage{
-map_snps_to_gene(genome_dt, ref_dt, window_size)
+map_snps_to_gene(genome_dt, ref_dt, window_size = 1000)
 }
 \arguments{
-\item{genome_dt}{this is a datatable after bonferroni correction. Should have column names, chr_no, pos}
+\item{genome_dt}{: a datatable with snp information identified in the study. Should have column names - chr_no, snp_pos}
 
-\item{ref_dt}{this is the Bos taraus dt which has gene_start, gene_end and chr_no column names}
+\item{ref_dt}{: is the Bos taraus data which has gene_start, gene_end and chr_no column names}
 
-\item{window_size}{}
+\item{window_size}{: gene start and end +/- window_size}
 }
 \value{
-a dt with all snps in genes
+a dt with all snps in gene windows
 }
 \description{
-The function gets genome data.table and reference data table
 It finds all the snps in genome that are in  gene +/- window_size
 }
 
