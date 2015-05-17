@@ -68,31 +68,28 @@ get_quartile <- function(df, column_name) {
     df$quartile <- df[,column_name]
     
   } else{
-    cat("Before Quartile", str(df))
     df$quartile <- with(df, cut(get(column_name),
                                 breaks=unique(quantile(get(column_name), probs=seq(0,1, by=0.25))), 
                                 include.lowest=TRUE))
+
     df$quartile <- as.factor(df$quartile)
     last_quartile <- tail(levels(df$quartile), n=1)
-    cat("\n\nlast quartile\n\n",last_quartile)
-    cat("\n\nlevels of quartiles\n\n",levels(df$quartile))
     df$quartile_ch <- as.character(df$quartile)
-    names(df)
+
     df <- filter(df, as.character(quartile_ch) == as.character(last_quartile))
-    cat("\n\ndf after fildering\n\n",str(df))
+
   }
   df <- as.data.table(df)
-  cat("\n\nbefore mean of all\n\n",str(df))
+
   df[, topQ_nlp := mean(get(column_name), na.rm = TRUE)]
-  df <- df[, .(ensemble_gene_id, topQ_nlp)]
-  
-  
-  cat("\n\\n\n\n\n\n\n\n\n\nEND\n\n")
-  
+  df <- df[, .(ensemble_gene_id, topQ_nlp)]  
   
   return(df)
 }
 
+
+
+#' Internally calls another function get_quartile
 
 get_topQ <- function(df, column_name, out_file_path = NULL) {
   
