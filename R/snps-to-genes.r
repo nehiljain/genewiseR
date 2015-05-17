@@ -5,8 +5,12 @@ library(stringr)
 #NOTE: NEHIL NEEDS TO CHANGE NORM_VAR_NAMES FUNCTION
 #NOTE: Nehil remove your fake gene start and end columns and cleanup names before writing in all cases. 
 
+#' @example: execute( in_genome_data_file_path = "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv", sep='\t'
+#' in_ref_gene_id_file_path = "/home/data/reference/77/cattle_gene_list-UMD3.1.77.txt",
+#' out_snps_in_genes_file_path = "/home/data/cattle_gene_level.tsv")
 
-execute <- function (in_genome_data_file_path, sep1, 
+
+pgi_execute_map_snp_to_genes <- function (in_genome_data_file_path, sep1, 
                      in_ref_gene_id_file_path, sep2, 
                      out_snps_in_genes_file_path, sep3, 
                      window_size = 1000) {
@@ -33,13 +37,20 @@ execute <- function (in_genome_data_file_path, sep1,
   write.table(result_dt, out_snps_in_genes_file_path, sep=sep3, row.names=F, quote = F)
 }
 
-#' The function gets genome data.table and reference data table
+
 #' It finds all the snps in genome that are in  gene +/- window_size
-#' @param genome_dt this is a datatable after bonferroni correction. Should have column names, chr_no, pos
-#' @param ref_dt this is the Bos taraus dt which has gene_start, gene_end and chr_no column names
-#' @param window_size
-#' @return a dt with all snps in genes
-map_snps_to_gene <- function(genome_dt, ref_dt, window_size) {
+#' @param genome_dt : a datatable with snp information identified in the study. Should have column names - chr_no, snp_pos
+#' @param ref_dt : is the Bos taraus data which has gene_start, gene_end and chr_no column names
+#' @param window_size : gene start and end +/- window_size
+#' @return a dt with all snps in gene windows
+map_snps_to_gene <- function(genome_dt, ref_dt, window_size=1000) {
+  
+  expect_true( c("snp_pos","chr_no") %in% names(genome_dt), 
+               info = "The column names 'snp_pos' 'chr_no' are not present in the study datatable", label = NULL)
+  
+  expect_true( c("snp_pos","chr_no") %in% names(ref_dt), 
+               info = "The column names 'snp_pos' 'chr_no' are not present in the refernce datatable", label = NULL)
+  
   genome_dt[, fake_gene_start := snp_pos]
   genome_dt[, fake_gene_end := snp_pos]
   ref_dt[, fake_gene_start := (gene_start - window_size)]
@@ -58,6 +69,4 @@ map_snps_to_gene <- function(genome_dt, ref_dt, window_size) {
 
 
 
-# execute( in_genome_data_file_path = "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv",
-# in_ref_gene_id_file_path = "/home/data/reference/77/cattle_gene_list-UMD3.1.77.txt",
-# out_snps_in_genes_file_path = "/home/data/cattle_gene_level.tsv")
+
