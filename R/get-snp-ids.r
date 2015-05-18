@@ -17,7 +17,8 @@ library(stringr)
 #' @return returns a data table with all the ref. snp ids joined to each row
 
 get_snp_ids <- function(df1, ref_df) {
-  
+  assert_that(is.data.table(df1))
+  assert_that(is.data.table(ref_df))
   df1 <- unique(df1, by=c("chr_no", "pos", "ref"))
   ref_df <- unique(ref_df, by=c("chr_no", "pos", "ref"))
   print(sum(duplicated(df1[, c("chr_no", "pos", "ref"), with=FALSE])))
