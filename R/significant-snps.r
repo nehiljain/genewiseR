@@ -1,4 +1,6 @@
 library(Hmisc)
+library(assertthat)
+library(testthat)
 
 #' if the out file path is not given then it returns the datatable else writes a tsv on the new path
 get_significant_snps <- function(df, threshold, column_name, out_file_path = NULL) {
@@ -42,8 +44,8 @@ get_max_and_mean <- function(df, column_name, out_file_path = NULL) {
   max_column <- paste0( "chr_max_",column_name)
   mean_column <- paste0( "chr_mean_",column_name)
   
-  df [, (max_column) := max(get(column_name)), by="ensemble_gene_id"]
-  df [, (mean_column) := mean(get(column_name)),  by="ensemble_gene_id"]
+  df [, (max_column) := max(get(column_name),na.rm = T), by="ensemble_gene_id"]
+  df [, (mean_column) := mean(get(column_name),na.rm = T),  by="ensemble_gene_id"]
   df [, snp_count := .N,  by="ensemble_gene_id"]
   
   #tricky step
@@ -62,7 +64,7 @@ get_max_and_mean <- function(df, column_name, out_file_path = NULL) {
 get_quartile <- function(df, column_name) {
   
   expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
-  
+  d[is.na(get(column_name)), get(column_name) := 0]
   df <- as.data.frame(df)
   if (dim(df)[1] == 1 | length(unique(df[,column_name])) == 1) {
     
