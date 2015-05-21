@@ -64,7 +64,7 @@ get_max_and_mean <- function(df, column_name, out_file_path = NULL) {
 get_quartile <- function(df, column_name) {
   
   expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
-  d[is.na(get(column_name)), get(column_name) := 0]
+  df[is.na(get(column_name)), get(column_name) := 0]
   df <- as.data.frame(df)
   if (dim(df)[1] == 1 | length(unique(df[,column_name])) == 1) {
     
