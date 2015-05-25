@@ -106,12 +106,12 @@ get_topQ <- function(df, column_name, quartile = 25, out_file_path = NULL) {
   expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
   
   result_sign_snp_topq_df <- ddply(df, "ensemble_gene_id", function(df) {
-      print(str(df))
+#       print(str(df))
     return(get_quartile(df, column_name, quartile))
   })
   
   result_sign_snp_topq_df <- unique(result_sign_snp_topq_df)
-  str(result_sign_snp_topq_df)
+#   str(result_sign_snp_topq_df)
   if (is.null(out_file_path)) {
     return(result_sign_snp_topq_df)
   } else {
