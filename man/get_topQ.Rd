@@ -2,11 +2,23 @@
 % Please edit documentation in R/significant-snps.r
 \name{get_topQ}
 \alias{get_topQ}
-\title{Internally calls another function get_quartile}
+\title{Top Q statistics.
+Uses Hmisc cut2 to get mean of nlp(negative log p-value) of snps in the top quartile of each gene}
 \usage{
-get_topQ(df, column_name, out_file_path = NULL)
+get_topQ(df, column_name, quartile = 25, out_file_path = NULL)
+}
+\arguments{
+\item{df}{data.table with the snps maps to genes}
+
+\item{column_name}{the name of the column which have negative log p-values}
+
+\item{quartile}{the quartile you want to use for topQ stats}
+
+\item{out_file_path}{The file where  output will be writen to
+Note: Internally calls another function get_quartile}
 }
 \description{
-Internally calls another function get_quartile
+Top Q statistics.
+Uses Hmisc cut2 to get mean of nlp(negative log p-value) of snps in the top quartile of each gene
 }
 

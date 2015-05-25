@@ -61,7 +61,7 @@ get_max_and_mean <- function(df, column_name, out_file_path = NULL) {
 
 
 
-get_quartile <- function(df, column_name) {
+get_quartile <- function(df, column_name, quartile = 25) {
   
   expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
   
@@ -73,7 +73,7 @@ get_quartile <- function(df, column_name) {
     
   } else{
     df$quartile <- with(df, cut(get(column_name),
-                                breaks=unique(quantile(get(column_name), probs=seq(0,1, by=0.25))), 
+                                breaks=unique(quantile(get(column_name), probs=seq(0,1, by=(quartile/100)))), 
                                 include.lowest=TRUE))
 
     df$quartile <- as.factor(df$quartile)
@@ -92,16 +92,22 @@ get_quartile <- function(df, column_name) {
 }
 
 
+#' Top Q statistics.
+#' Uses Hmisc cut2 to get mean of nlp(negative log p-value) of snps in the top quartile of each gene
+#' 
+#'  @param df data.table with the snps maps to genes
+#'  @param column_name the name of the column which have negative log p-values
+#'  @param quartile the quartile you want to use for topQ stats
+#'  @param out_file_path The file where  output will be writen to
+#' Note: Internally calls another function get_quartile
 
-#' Internally calls another function get_quartile
-
-get_topQ <- function(df, column_name, out_file_path = NULL) {
-  
+get_topQ <- function(df, column_name, quartile = 25, out_file_path = NULL) {
+  assert_that(is.data.table(df))
   expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
   
   result_sign_snp_topq_df <- ddply(df, "ensemble_gene_id", function(df) {
       print(str(df))
-    return(get_quartile(df, column_name))
+    return(get_quartile(df, column_name, quartile))
   })
   
   result_sign_snp_topq_df <- unique(result_sign_snp_topq_df)
