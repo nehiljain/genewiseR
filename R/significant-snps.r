@@ -1,6 +1,6 @@
 library(Hmisc)
 library(assertthat)
-library(testthat)
+
 
 #' if the out file path is not given then it returns the datatable else writes a tsv on the new path
 get_significant_snps <- function(df, threshold, column_name, out_file_path = NULL) {
@@ -9,11 +9,11 @@ get_significant_snps <- function(df, threshold, column_name, out_file_path = NUL
   expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
   
   signifant_df <- df[get(column_name) < threshold]
-  if (is.null(out_file_path)) {
-    return(signifant_df)
-  } else {
+  
+  if (!is.null(out_file_path)) {
     write.table(x = signifant_df, file=out_file_path, quote = F, sep = "\t", row.names = F)
   }
+  return(signifant_df)
 }
 
 
@@ -27,11 +27,10 @@ get_nlp <- function(df, column_name, out_file_path = NULL) {
   
   nlp_column <- paste0(column_name, ".nlp")
   df[, (nlp_column) := -1 * log10(get(column_name))]
-  if (is.null(out_file_path)) {
-    return(df)
-  } else {
+  if (!is.null(out_file_path)) {
     write.table(x = df, file=out_file_path, quote = F, sep = "\t", row.names = F)
   }
+  return(df)
 }
 
 
@@ -51,11 +50,10 @@ get_max_and_mean <- function(df, column_name, out_file_path = NULL) {
   #tricky step
   df <- unique(df[,.(ensemble_gene_id, maxT = get(max_column), meanT = get(mean_column), snp_count)])
   
-  if (is.null(out_file_path)) {
-    return(df)
-  } else {
+  if (!is.null(out_file_path)) {
     write.table(x = df, file=out_file_path, quote = F, sep = "\t", row.names = F)
   }
+  return(df)
 }
 
 
@@ -63,7 +61,7 @@ get_max_and_mean <- function(df, column_name, out_file_path = NULL) {
 
 get_quartile <- function(df, column_name, quartile = 25) {
   
-  expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
+  assert_that(sum(column_name %in% names(df)) == length(column_name))
   
   df <- as.data.frame(df)
   df[is.na(df[,column_name]), column_name] <- 0
@@ -112,10 +110,9 @@ get_topQ <- function(df, column_name, quartile = 25, out_file_path = NULL) {
   
   result_sign_snp_topq_df <- unique(result_sign_snp_topq_df)
 #   str(result_sign_snp_topq_df)
-  if (is.null(out_file_path)) {
-    return(result_sign_snp_topq_df)
-  } else {
+  if (!is.null(out_file_path)) {
     write.table(x = result_sign_snp_topq_df, file=out_file_path, quote = F, sep = "\t", row.names = F)
   }
+  return(result_sign_snp_topq_df)
 }
 
