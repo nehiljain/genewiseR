@@ -86,6 +86,7 @@ get_quartile <- function(df, column_name, quartile = 25) {
   topq_column_name <- paste0("topQ_",quartile,"_nlp")
   df[, (topq_column_name) := mean(get(column_name), na.rm = TRUE)]
   df <- df[, .(ensemble_gene_id, get(topq_column_name))]  
+  setnames(df, "V2", topq_column_name)
   
   return(df)
 }
