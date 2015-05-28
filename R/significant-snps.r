@@ -24,7 +24,7 @@ get_nlp <- function(df, column_name, out_file_path = NULL) {
   
   expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
   
-  
+  df[is.na(df[,column_name]), column_name] <- 0
   nlp_column <- paste0(column_name, ".nlp")
   df[, (nlp_column) := -1 * log10(get(column_name))]
   if (!is.null(out_file_path)) {
@@ -39,7 +39,7 @@ get_nlp <- function(df, column_name, out_file_path = NULL) {
 get_max_and_mean <- function(df, column_name, out_file_path = NULL) { 
   
   expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
-  
+  df[is.na(df[,column_name]), column_name] <- 0
   max_column <- paste0( "chr_max_",column_name)
   mean_column <- paste0( "chr_mean_",column_name)
   
@@ -65,6 +65,10 @@ get_quartile <- function(df, column_name, quartile = 25) {
   
   df <- as.data.frame(df)
   df[is.na(df[,column_name]), column_name] <- 0
+  
+  
+  
+  
   if (dim(df)[1] == 1 | length(unique(df[,column_name])) == 1) {
     
     df$quartile <- df[,column_name]
@@ -92,6 +96,26 @@ get_quartile <- function(df, column_name, quartile = 25) {
 }
 
 
+get_quartile2 <- function(df, column_name, quartile = 25) {
+  
+  assert_that(sum(column_name %in% names(df)) == length(column_name))
+  
+  df <- as.data.table(df)
+  df <- df[,.(ensemble_gene_id,get(column_name))]
+  df[is.na(get(column_name)), get(column_name) := 0]
+  df[order(-get(column_name))]
+  
+  top_subset <- round(quartile/100 * dim(df)[1])
+ 
+  topq_column_name <- paste0("topQ_",quartile,"_nlp")
+  df[1:top_subset, (topq_column_name) := mean(get(column_name), na.rm = TRUE)]
+  df <- df[, .(ensemble_gene_id, get(topq_column_name))]  
+  setnames(df, "V2", topq_column_name)
+  
+  return(df)
+}
+
+
 #' Top Q statistics.
 #' Uses Hmisc cut2 to get mean of nlp(negative log p-value) of snps in the top quartile of each gene
 #' 
@@ -107,7 +131,7 @@ get_topQ <- function(df, column_name, quartile = 25, out_file_path = NULL) {
   
   result_sign_snp_topq_df <- ddply(df, "ensemble_gene_id", function(df) {
 #       print(str(df))
-    return(get_quartile(df, column_name, quartile))
+    return(get_quartile2(df, column_name, quartile))
   })
   
   result_sign_snp_topq_df <- unique(result_sign_snp_topq_df)
