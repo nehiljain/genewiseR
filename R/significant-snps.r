@@ -96,24 +96,58 @@ get_quartile <- function(df, column_name, quartile = 25) {
 }
 
 
-get_quartile2 <- function(df, column_name, quartile = 25) {
+get_topX_sample <- function(df, column_name, quartile = 25) {
+  
   
   assert_that(sum(column_name %in% names(df)) == length(column_name))
   
   df <- as.data.table(df)
-  df <- df[,.(ensemble_gene_id,get(column_name))]
-  df[is.na(get(column_name)), get(column_name) := 0]
-  df[order(-get(column_name))]
+  df <- df[,.(ensemble_gene_id, nlp = get(column_name))]
+  df[is.na(nlp), nlp := 0]
+  df[order(-nlp)]
   
   top_subset <- round(quartile/100 * dim(df)[1])
  
   topq_column_name <- paste0("topQ_",quartile,"_nlp")
-  df[1:top_subset, (topq_column_name) := mean(get(column_name), na.rm = TRUE)]
+  df[1:top_subset, (topq_column_name) := mean(nlp, na.rm = TRUE)]
   df <- df[, .(ensemble_gene_id, get(topq_column_name))]  
   setnames(df, "V2", topq_column_name)
   
   return(df)
 }
+
+
+
+
+
+
+
+get_topX_subset <- function(df, column_name, percent = 25) {
+  
+  
+  assert_that(sum(column_name %in% names(df)) == length(column_name))
+  
+  df <- as.data.table(df)
+  df <- df[,.(ensemble_gene_id, nlp = get(column_name))]
+  df[is.na(nlp), nlp := 0]
+  df[order(-nlp)]
+  
+  threshold_nlp <- percent/100 * max(df[,nlp])
+  
+  
+  topq_column_name <- paste0("topQ_",quartile,"_nlp")
+  df[nlp > threshold_nlp, (topq_column_name) := mean(nlp, na.rm = TRUE)]
+  df <- df[, .(ensemble_gene_id, get(topq_column_name))]  
+  setnames(df, "V2", topq_column_name)
+  
+  return(df)
+}
+
+
+
+
+
+
 
 
 #' Top Q statistics.
@@ -125,13 +159,13 @@ get_quartile2 <- function(df, column_name, quartile = 25) {
 #'  @param out_file_path The file where  output will be writen to
 #' Note: Internally calls another function get_quartile
 
-get_topQ <- function(df, column_name, quartile = 25, out_file_path = NULL) {
+get_topQ <- function(df, column_name, threshold = 25, out_file_path = NULL) {
   assert_that(is.data.table(df))
   expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
-  
+#   print(str(df))
   result_sign_snp_topq_df <- ddply(df, "ensemble_gene_id", function(df) {
 #       print(str(df))
-    return(get_quartile2(df, column_name, quartile))
+    return(get_quartile(df, column_name, threshold))
   })
   
   result_sign_snp_topq_df <- unique(result_sign_snp_topq_df)
