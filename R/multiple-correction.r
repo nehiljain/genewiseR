@@ -10,12 +10,11 @@ window_size <- 1000
 #' @param SNP p value stats data table
 #' @return Datable with additional columns for genomewide correction of each column vector
 
-p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, out_genome_p_adj_file_path, col_names) {
+p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, out_file_path, col_names) {
   assert_that(is.readable(in_un_adj_p_val_snps_data_file_path))
-  assert_that(is.writeable(out_genome_p_adj_file_path))
   
   snp_stats_dt <- fread(in_un_adj_p_val_snps_data_file_path, sep="\t", sep2="auto", header=T, na.strings="NA",
-                          stringsAsFactors = FALSE, verbose =T, nrow=100)
+                          stringsAsFactors = FALSE, verbose =T)
   
   expect_true( col_names %in% names(snp_stats_dt), info = "The column names are not present in the datatable", label = NULL)
   length_dt <- dim(snp_stats_dt)[1]
@@ -25,8 +24,11 @@ p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, out_ge
     snp_stats_dt[, (adj_name) := p.adjust(get(ch), "fdr", length_dt)]
   }
   
-  
-  write.table(x = snp_stats_dt, file=out_genome_p_adj_file_path, quote = F, sep = "\t", row.names = F)
+  if (!is.null(out_file_path)) {
+    write.table(x = snp_stats_dt, file=out_file_path, quote = F, sep = "\t", row.names = F)
+  }
+  return(snp_stats_dt)
+ 
 }
 
 
