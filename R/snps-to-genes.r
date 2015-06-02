@@ -45,12 +45,12 @@ pgi_execute_map_snp_to_genes <- function (in_genome_data_file_path, sep1,
 #' @param window_size : gene start and end +/- window_size
 #' @return a dt with all snps in gene windows
 map_snps_to_gene <- function(genome_dt, ref_dt, window_size=1000) {
-  
-  expect_true( c("snp_pos","chr_no") %in% names(genome_dt), 
-               info = "The column names 'snp_pos' 'chr_no' are not present in the study datatable", label = NULL)
-  
-  expect_true( c("snp_pos","chr_no") %in% names(ref_dt), 
-               info = "The column names 'snp_pos' 'chr_no' are not present in the refernce datatable", label = NULL)
+  print(names(genome_dt))
+#   expect_true( c("snp_pos","chr_no") %in% names(genome_dt), 
+#                info = "The column names 'snp_pos' 'chr_no' are not present in the study datatable", label = NULL)
+#   
+#   expect_true( c("snp_pos","chr_no") %in% names(ref_dt), 
+#                info = "The column names 'snp_pos' 'chr_no' are not present in the refernce datatable", label = NULL)
   
   genome_dt[, fake_gene_start := snp_pos]
   genome_dt[, fake_gene_end := snp_pos]
