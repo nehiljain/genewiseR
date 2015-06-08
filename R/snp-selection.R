@@ -5,23 +5,24 @@ library(dplyr)
 library(logging)
 
 
-snp_df <- fread("/home/tmp/nlp_all_snps_in_genes.tsv", sep="\t", sep2="auto", header=T, na.strings="NA", stringsAsFactors = FALSE, verbose =T)
-snp_df <- snp_df[,.(chr_no, snp_pos, cmh_p_val, cmh_p_val.p_adj_genome_wide.nlp, ensemble_gene_id)]
-snp_df <- snp_df[chr_no == "1"]
-
 basicConfig()
+addHandler(writeToFile, logger="genewise.snp-selection", file="~/coderepo/genewise/genewise_logs.log")
+setLevel(10, getHandler('writeToFile', logger='genewise'))
 
-addHandler(writeToFile, logger="genewise", file="~/coderepo/genewise/genewise_logs.log")
-setLevel(50, getHandler('writeToFile', logger='genewise'))
 
+#` @examples
+#` snp_df <- fread("/home/tmp/nlp_all_snps_in_genes.tsv", sep="\t", sep2="auto", header=T, na.strings="NA", stringsAsFactors = FALSE, verbose =T)
+#` snp_df <- snp_df[,.(chr_no, snp_pos, cmh_p_val, cmh_p_val.p_adj_genome_wide.nlp, ensemble_gene_id)]
+#` snp_df <- snp_df[chr_no == "1"]
+#` np_selection(snps_data = snp_df, ld_blocks_file_path = "/home/data/tmp/chr1i/blocks.blocks.det")
+#` 
+#` @param ld_blocks_file_path file path to data from plink for one chromosome
 
-#` file path to data from plink for one chromosome
-
-snp_selection <- function(snps_data, ld_blocks_file_path) {
+snp_selection <- function(snps_data, ld_blocks_file_path, out_file_path = NULL) {
   
   
   if (!is.data.table(snps_data)) {
-    snp_df <- as.data.table(snp_df)
+    snps_data <- as.data.table(snps_data)
   }
   
   
@@ -32,16 +33,16 @@ snp_selection <- function(snps_data, ld_blocks_file_path) {
            c("chr_no","gene_start", "gene_end","KB" ,"NSNPS","SNPS"))
   
   ld_dt$chr_no <- as.character(ld_dt$chr_no)
-  snp_df$chr_no <- as.character(snp_df$chr_no)
+  snp_data$chr_no <- as.character(snp_data$chr_no)
   
   length_ids <- dim(ld_dt)[1]
   custom_names <- rep("pgi_dal_ld_", length_ids)
   custom_names <- paste0(custom_names, seq(1,length_ids))
   ld_dt[, ld_id := custom_names]
   
-  result_dt <- map_snps_to_gene(genome_dt = snp_df[,.(chr_no, snp_pos)], ref_dt = ld_dt, window_size=0)
+  result_dt <- map_snps_to_gene(genome_dt = snp_data[,.(chr_no, snp_pos)], ref_dt = ld_dt, window_size=0)
   result_dt[,c("fake_gene_start","fake_gene_end","i.fake_gene_start","i.fake_gene_end"):= NULL]
-  result_dt <-  merge(x = snp_df, y= result_dt, by = c("chr_no","snp_pos"), all.x=T)
+  result_dt <-  merge(x = snp_data, y= result_dt, by = c("chr_no","snp_pos"), all.x=T)
   result_dt[,c("fake_gene_start","fake_gene_end","i.fake_gene_start","i.fake_gene_end"):= NULL]
   
   result_dt <- result_dt %>% 
@@ -63,7 +64,7 @@ snp_selection <- function(snps_data, ld_blocks_file_path) {
       if (!(df$ld_id %in% selected_snps[ensemble_gene_id == df$ensemble_gene_id, ld_id])) {
         logdebug(sprintf("\ncase : New LD  %s, highest significance snp, distance not considered", df$ld_id), 
                  logger="genewise.snp-selction")
-        cat(!(df$ld_id %in% selected_snps[ensemble_gene_id == df$ensemble_gene_id, ld_id]), str(selected_snps[ensemble_gene_id == df$ensemble_gene_id, ld_id]))
+        
         selected_snps <<- rbindlist(list(selected_snps, df))
       }
     } else {
@@ -76,38 +77,13 @@ snp_selection <- function(snps_data, ld_blocks_file_path) {
     }
   })
   
+  #output and returning
+  if (!is.null(out_file_path)) {
+    write.table(x = selected_snps, file=out_file_path, quote = F, sep = "\t", row.names = F)
+  }
+  return(selected_snps)
   
 }
 
 
 
-
-# 
-# snp_df$chr_no <- as.character(snp_df$chr_no)
-# length_ids <- dim(ld_dt)[1]
-# custom_names <- rep("pgi_dal_ld_", length_ids)
-# custom_names <- paste0(custom_names, seq(1,length_ids))
-# 
-# print(names(ld_dt))
-
-
-# result_dt <- map_snps_to_gene(genome_dt = snp_df[,.(chr_no, snp_pos)], ref_dt = ld_dt, window_size=0)
-# result_dt[,c("fake_gene_start","fake_gene_end","i.fake_gene_start","i.fake_gene_end"):= NULL]
-# test <-  merge(x = snp_df, y= result_dt, by = c("chr_no","snp_pos"), all.x=T)
-# test[,c("fake_gene_start","fake_gene_end","i.fake_gene_start","i.fake_gene_end"):= NULL]
-# 
-# 
-# 
-# 
-# newTest <- test %>% 
-#           group_by(chr_no, ensemble_gene_id) %>%
-#           arrange(desc(cmh_p_val.p_adj_genome_wide.nlp), cmh_p_val)
-# 
-# newTest <- newTest[chr_no == "1"]
-# newTest <- unique(newTest)
-# selected_snps <- newTest[1]
-# 
-# 
-# system.time()
-# 
-# selected_snps <- as.data.table(selected_snps)

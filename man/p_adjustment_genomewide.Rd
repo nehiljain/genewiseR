@@ -5,8 +5,8 @@
 \title{This function add a new column to the datatable created by bonferroni correction
 the column name is p_adj_genome. COLUMN required cmh_p_val}
 \usage{
-p_adjustment_genomewide(in_un_adj_p_val_snps_data_file_path,
-  out_genome_p_adj_file_path, col_names)
+p_adjustment_genomewide(in_un_adj_p_val_snps_data_file_path, out_file_path,
+  col_names)
 }
 \arguments{
 \item{SNP}{p value stats data table}

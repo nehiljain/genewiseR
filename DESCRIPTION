@@ -7,11 +7,11 @@ Depends: R (>= 3.1.2), data.table
 License: What license is it under?
 LazyData: true
 Imports:
-    assertthat,
-    testthat,
     plyr,
     dplyr,
+    assertthat,
     stringr,
     Hmisc,
-    logging
+    logging,
+    testthat,
     
