@@ -6,7 +6,7 @@ library(assertthat)
 get_significant_snps <- function(df, threshold, column_name, out_file_path = NULL) {
   
   see_if(is.number(threshold))
-  expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
+#   assert_that( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
   
   signifant_df <- df[get(column_name) < threshold]
   

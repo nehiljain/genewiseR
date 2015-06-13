@@ -1,7 +1,4 @@
 
-library(data.table)
-library(stringr)
-
 #NOTE: NEHIL NEEDS TO CHANGE NORM_VAR_NAMES FUNCTION
 #NOTE: Nehil remove your fake gene start and end columns and cleanup names before writing in all cases. 
 
@@ -51,7 +48,7 @@ map_snps_to_gene <- function(genome_dt, ref_dt, window_size=1000) {
 #   
 #   expect_true( c("snp_pos","chr_no") %in% names(ref_dt), 
 #                info = "The column names 'snp_pos' 'chr_no' are not present in the refernce datatable", label = NULL)
-  
+  genome_dt <- as.data.table(genome_dt)
   genome_dt[, fake_gene_start := snp_pos]
   genome_dt[, fake_gene_end := snp_pos]
   ref_dt[, fake_gene_start := (gene_start - window_size)]
