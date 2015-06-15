@@ -12,7 +12,7 @@ setLevel(0, getHandler('writeToFile', logger='genewise'))
 #` 
 #` @param ld_blocks_file_path file path to data from plink for one chromosome
 
-snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold = -1, chr_no_i, out_file_path = NULL) {
+snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold = -1, chr_no_i, p_val_col_name = "cmh_p_value", out_file_path = NULL) {
 
   
   if (!is.data.table(snps_data)) {
@@ -34,9 +34,7 @@ snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold
   
   if (significance_threshold > 0) {
     cat("significant snps only\n\n")
-    print(summary(snps_data$cmh_p_val.p_adj_genome_wide))
-    snps_data <- get_significant_snps(snps_data, significance_threshold, "cmh_p_val.p_adj_genome_wide")
-    print(summary(snps_data$cmh_p_val.p_adj_genome_wide))
+    snps_data <- get_significant_snps(snps_data, significance_threshold, p_val_col_name)
   }
   
   length_ids <- dim(ld_df)[1]
