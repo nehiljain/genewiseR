@@ -13,5 +13,5 @@ Imports: data.table (>= 1.9.5),
     assertthat,
     stringr,
     Hmisc,
-    logging,
+    logging
     
