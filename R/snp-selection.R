@@ -14,9 +14,6 @@ setLevel(0, getHandler('writeToFile', logger='genewise'))
 
 snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold = -1, out_file_path = NULL) {
 
-  basicConfig()
-  addHandler(writeToFile, logger="genewise", file="~/coderepo/genewise/genewise_logs.log")
-  setLevel(0, getHandler('writeToFile', logger='genewise'))
   
   if (!is.data.table(snps_data)) {
     snps_data <- as.data.table(snps_data)
