@@ -12,7 +12,7 @@ setLevel(0, getHandler('writeToFile', logger='genewise'))
 #` 
 #` @param ld_blocks_file_path file path to data from plink for one chromosome
 
-snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold = -1, out_file_path = NULL) {
+snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold = -1, chr_no_i, out_file_path = NULL) {
 
   
   if (!is.data.table(snps_data)) {
@@ -58,7 +58,7 @@ snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold
   ld_snp_merge_dt <- ld_snp_merge_dt %>% 
                       group_by(chr_no, ensemble_gene_id) %>%
                       arrange(desc(cmh_p_val.p_adj_genome_wide.nlp), cmh_p_val)
-  ld_snp_merge_dt <- ld_snp_merge_dt[chr_no == "1"]
+  ld_snp_merge_dt <- ld_snp_merge_dt[chr_no == chr_no_i]
   ld_snp_merge_dt <- unique(ld_snp_merge_dt)
   ld_snp_merge_dt[,gene_start.y := NULL]
   ld_snp_merge_dt[,gene_end.y := NULL]
