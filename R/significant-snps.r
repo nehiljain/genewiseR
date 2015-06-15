@@ -22,7 +22,7 @@ get_significant_snps <- function(df, threshold, column_name, out_file_path = NUL
 #' if the out file path is not given then it returns the datatable else writes a tsv on the new path
 get_nlp <- function(df, column_name, out_file_path = NULL) {
   
-  expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
+  assert_that(all(column_name %in% names(df)))
   
   df[is.na(df[,column_name]), column_name] <- 0
   nlp_column <- paste0(column_name, ".nlp")
@@ -38,7 +38,7 @@ get_nlp <- function(df, column_name, out_file_path = NULL) {
 #' if the out file path is not given then it returns the datatable else writes a tsv on the new path
 get_max_and_mean <- function(df, column_name, out_file_path = NULL) { 
   
-  expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
+  assert_that(all(column_name %in% names(df)))
   df[is.na(df[,column_name]), column_name] <- 0
   max_column <- paste0( "chr_max_",column_name)
   mean_column <- paste0( "chr_mean_",column_name)
@@ -61,7 +61,7 @@ get_max_and_mean <- function(df, column_name, out_file_path = NULL) {
 
 get_quartile <- function(df, column_name, quartile = 25) {
   
-  assert_that(sum(column_name %in% names(df)) == length(column_name))
+  assert_that(all(column_name %in% names(df)))
   
   df <- as.data.frame(df)
   df[is.na(df[,column_name]), column_name] <- 0
@@ -99,7 +99,7 @@ get_quartile <- function(df, column_name, quartile = 25) {
 get_topX_sample <- function(df, column_name, quartile = 25) {
   
   
-  assert_that(sum(column_name %in% names(df)) == length(column_name))
+  assert_that(all(column_name %in% names(df)))
   
   df <- as.data.table(df)
   df <- df[,.(ensemble_gene_id, nlp = get(column_name))]
@@ -161,7 +161,7 @@ get_topX_subset <- function(df, column_name, percent = 25) {
 
 get_topQ <- function(df, column_name, threshold = 25, out_file_path = NULL) {
   assert_that(is.data.table(df))
-  expect_true( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
+  assert_that( all(column_name %in% names(df)))
 #   print(str(df))
   result_sign_snp_topq_df <- ddply(df, "ensemble_gene_id", function(df) {
 #       print(str(df))

@@ -17,7 +17,18 @@ test_that("length of each ld _id", {
   distance_condition <- dlply(result, .(ensemble_gene_id), function(df) {
     df <- as.data.table(df)
     df[ , snp_pos_diff := snp_pos - shift(snp_pos, 1L, type="lead")]
-    all(na.omit(df[ , !(abs(snp_pos_diff) < 1000 & is.na(shift(ld_id, 1L, type="lead")))]))
+    bool_result <- na.omit(df[ , !(abs(snp_pos_diff) < 1000 & is.na(shift(ld_id, 1L, type="lead")))])
+    false_list <- which(bool_result == F)
+    difference_in_ld_if_condition_met <- l_ply(false_list, function(index) {
+      c((is.na(df[index, ld_id]) != is.na(df[index+1, ld_id])),
+        (is.na(df[index, ld_id]) != is.na(df[index-1, ld_id]))
+      )
+    })
+    if(all(difference_in_ld_if_condition_met)) {
+      TRUE
+    } else {
+      all(difference_in_ld_if_condition_met)
+    }
   })
   
   expect_true(all(distance_condition))

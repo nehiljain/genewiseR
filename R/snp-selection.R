@@ -1,13 +1,7 @@
-library(data.table)
-library(assertthat)
-library(plyr)
-library(dplyr)
-library(logging)
-
 
 basicConfig()
 addHandler(writeToFile, logger="genewise", file="~/coderepo/genewise/genewise_logs.log")
-setLevel(10, getHandler('writeToFile', logger='genewise'))
+setLevel(0, getHandler('writeToFile', logger='genewise'))
 
 
 #` @examples
@@ -32,6 +26,9 @@ snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold
            names(ld_df), 
            c("chr_no","gene_start", "gene_end","KB" ,"NSNPS","SNPS"))
   
+  assert_that(is.data.table(ld_df))
+  assert_that(is.data.table(snps_data))
+  
   ld_df[,chr_no := as.character(chr_no)]
   snps_data[,chr_no := as.character(chr_no)]
   
@@ -51,16 +48,16 @@ snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold
   
   snps_data <- as.data.table(snps_data)
   temp <- snps_data[,.(chr_no, snp_pos)]
+
   result_dt <- map_snps_to_gene(genome_dt = temp , ref_dt = ld_df, window_size=0)
   result_dt[,c("fake_gene_start","fake_gene_end","i.fake_gene_start","i.fake_gene_end"):= NULL, with=FALSE]
-#   print(str(result_dt))
+  
   ld_snp_merge_dt <-  merge(x = snps_data, y= result_dt, by = c("chr_no","snp_pos"), all.x=T, )
   ld_snp_merge_dt[,c("fake_gene_start","fake_gene_end","i.fake_gene_start","i.fake_gene_end"):= NULL, with=FALSE]
-   
-#   print(str(ld_snp_merge_dt))
+
   ld_snp_merge_dt <- ld_snp_merge_dt %>% 
-    group_by(chr_no, ensemble_gene_id) %>%
-    arrange(desc(cmh_p_val.p_adj_genome_wide.nlp), cmh_p_val)
+                      group_by(chr_no, ensemble_gene_id) %>%
+                      arrange(desc(cmh_p_val.p_adj_genome_wide.nlp), cmh_p_val)
   ld_snp_merge_dt <- ld_snp_merge_dt[chr_no == "1"]
   ld_snp_merge_dt <- unique(ld_snp_merge_dt)
   ld_snp_merge_dt[,gene_start.y := NULL]
@@ -70,12 +67,12 @@ snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold
   
   d_ply(ld_snp_merge_dt[!is.na(cmh_p_val)], .(ensemble_gene_id, snp_pos), function(df) {
     
-    loginfo(sprintf("Processing snp at pos %d ld - %s", df$snp_pos, df$ld_id), logger="genewise.snp-selction")
+    logdebug(sprintf("Processing snp at pos %d ld - %s", df$snp_pos, df$ld_id), logger="genewise.snp-selction")
     if (length(df$ld_id) > 1) {
       logerror("lenght of the row in d_ply loop is not 1", logger="genewise.snp-selction")
     } 
     if (!is.na(df$ld_id) & length(df$ld_id) <= 1) {
-      loginfo(sprintf("\nld found - %s with geneid %s and number of enteries in selected snp are %i", df$ld_id, df$ensemble_gene_id, length(selected_snps[ensemble_gene_id == df$ensemble_gene_id, ld_id])), logger="genewise.snp-selction")
+      logdebug(sprintf("\nld found - %s with geneid %s and number of enteries in selected snp are %i", df$ld_id, df$ensemble_gene_id, length(selected_snps[ensemble_gene_id == df$ensemble_gene_id, ld_id])), logger="genewise.snp-selction")
       
       if (!(df$ld_id %in% selected_snps[ensemble_gene_id == df$ensemble_gene_id, ld_id])) {
         logdebug(sprintf("\ncase : New LD  %s, highest significance snp, distance not considered", df$ld_id), 
