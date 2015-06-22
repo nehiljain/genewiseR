@@ -2,13 +2,24 @@
 % Please edit documentation in R/get-snp-ids.r
 \name{combine_files_in_dir}
 \alias{combine_files_in_dir}
-\title{This function combines the files in the geiven directory
+\title{This function combines the files in the given directory.
+Option 1 : Set header = T and no col_names. In this case the function will read the file and user the header of the first
+file in the directory.
 The assumption is that it does not have a header (default)}
 \usage{
 combine_files_in_dir(dir_path, header = F, col_names = NULL)
 }
+\arguments{
+\item{dir_path}{Absolute path of the directory containing the files to be combined.}
+
+\item{header}{Boolean value of if the header needs to be considered}
+
+\item{col_names}{Character vector to replace the header with a custom column name.}
+}
 \description{
-This function combines the files in the geiven directory
+This function combines the files in the given directory.
+Option 1 : Set header = T and no col_names. In this case the function will read the file and user the header of the first
+file in the directory.
 The assumption is that it does not have a header (default)
 }
 

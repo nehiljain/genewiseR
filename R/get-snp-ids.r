@@ -89,9 +89,14 @@ norm_var_names <- function(vars, sep="_") {
 }
 
 
-#' This function combines the files in the given directory
+#' This function combines the files in the given directory.
+#' Option 1 : Set header = T and no col_names. In this case the function will read the file and user the header of the first 
+#' file in the directory. 
 #' The assumption is that it does not have a header (default)
 #' 
+#' @param dir_path Absolute path of the directory containing the files to be combined. 
+#' @param header Boolean value of if the header needs to be considered
+#' @param col_names Character vector to replace the header with a custom column name.
 combine_files_in_dir <- function(dir_path, header = F, col_names = NULL) {
   filename_list <- list.files(dir_path, full.names = T)
   
