@@ -110,7 +110,13 @@ combine_files_in_dir <- function(dir_path, header = F, col_names = NULL) {
   }
   cat("reading over",l)
   combine_data <- unique(combine_data)
-  setnames(combine_data, names(combine_data), norm_var_names(col_names))
+  if (is.null(header) & is.null(col_names)) {
+    warning("Header and Col Names are both NULL")
+    setnames(combine_data, names(combine_data), norm_var_names(col_names))
+  } else {
+    setnames(combine_data, names(combine_data), norm_var_names(names(combine_data)))
+  }
+  
   return(combine_data)
 }
 
