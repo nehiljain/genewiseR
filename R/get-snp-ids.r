@@ -89,13 +89,13 @@ norm_var_names <- function(vars, sep="_") {
 }
 
 
-#' This function combines the files in the geiven directory
+#' This function combines the files in the given directory
 #' The assumption is that it does not have a header (default)
 #' 
 combine_files_in_dir <- function(dir_path, header = F, col_names = NULL) {
   filename_list <- list.files(dir_path, full.names = T)
   
-  cat("Reading Init",)
+  cat("Reading Init",filename_list[[1]])
   combine_data <- fread(filename_list[[1]], sep="\t", header = header, na.strings="NA",
                              stringsAsFactors = FALSE, verbose =T)
   if (is.null(header) & is.null(col_names)) {
@@ -113,6 +113,7 @@ combine_files_in_dir <- function(dir_path, header = F, col_names = NULL) {
   setnames(combine_data, names(combine_data), norm_var_names(col_names))
   return(combine_data)
 }
+
 
 
 #' The function takes in the data frame after attaching snp ids from the ref. 
