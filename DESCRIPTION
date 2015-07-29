@@ -6,6 +6,7 @@ Description: What the package does (one paragraph)
 Depends: R (>= 3.1.2), 
           data.table (>= 1.9.5)
 License: What license is it under?
+VignetteBuilder: knitr
 LazyData: true
 Imports: data.table (>= 1.9.5),
     plyr,
@@ -13,5 +14,6 @@ Imports: data.table (>= 1.9.5),
     assertthat,
     stringr,
     Hmisc,
-    logging
+    logging,
+    R.utils
     

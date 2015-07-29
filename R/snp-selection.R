@@ -1,6 +1,6 @@
 library(logging)
 basicConfig()
-addHandler(writeToFile, logger="genewise", file="~/coderepo/genewise/genewise_logs.log")
+addHandler(writeToFile, logger="genewise", file="~/genewise_logs.log")
 setLevel(0, getHandler('writeToFile', logger='genewise'))
 
 
@@ -12,7 +12,7 @@ setLevel(0, getHandler('writeToFile', logger='genewise'))
 #` 
 #` @param ld_blocks_file_path file path to data from plink for one chromosome
 
-snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold = -1, chr_no_i, p_val_col_name = "cmh_p_value", out_file_path = NULL) {
+snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold = -1, chr_no_i, p_val_col_name = "cmh_p_val", out_file_path = NULL) {
 
   
   if (!is.data.table(snps_data)) {
@@ -33,7 +33,7 @@ snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold
   snps_data[,chr_no := as.character(chr_no)]
   
   if (significance_threshold > 0) {
-    cat("significant snps only\n\n")
+    cat("significant snps only\n Threshold: ",significance_threshold, "\n ", p_val_col_name )
     snps_data <- get_significant_snps(snps_data, significance_threshold, p_val_col_name)
   }
   
