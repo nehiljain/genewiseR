@@ -16,4 +16,4 @@ Imports: data.table (>= 1.9.5),
     Hmisc,
     logging,
     R.utils
-    
+Suggests: knitr

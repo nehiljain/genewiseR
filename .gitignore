@@ -3,3 +3,4 @@
 .RData
 
 *.log*
+inst/doc
