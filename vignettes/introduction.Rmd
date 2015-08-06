@@ -11,6 +11,18 @@ vignette: >
 
 Genewise is an R package developed by Beiko Lab @ Dalhousie University. install.packages("rmarkdown")
 
+- Popoolation
+- Pvalues
+- Ensembl annotation file
+- map snps to genes/qtl/regions
+- Naming of new snps
+- p value, which multiple correction test?
+- adj p value, chr wide or genome wide?
+- which topq to be use? meaning of topq, meanq
+- gene ranking statistics
+- ld algorithm
+
+
 
 Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
 
