@@ -1,6 +1,4 @@
 
-library(data.table)
-
 window_size <- 1000
 
 

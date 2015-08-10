@@ -14,6 +14,6 @@ Imports: data.table (>= 1.9.5),
     assertthat,
     stringr,
     Hmisc,
-    logging,
+    futile.logger (>= 1.3.7),
     R.utils
 Suggests: knitr
