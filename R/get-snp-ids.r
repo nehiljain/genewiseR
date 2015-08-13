@@ -1,10 +1,3 @@
-reset = T
-
-if (reset) {
-  rm(list = ls())  
-}
-
-
 
 
 #' To get the snp ides of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele 
@@ -18,8 +11,6 @@ get_snp_ids <- function(df1, ref_df) {
   assert_that(is.data.table(ref_df))
   df1 <- unique(df1, by=c("chr_no", "pos", "ref"))
   ref_df <- unique(ref_df, by=c("chr_no", "pos", "ref"))
-  print(sum(duplicated(df1[, c("chr_no", "pos", "ref"), with=FALSE])))
-  print(sum(duplicated(ref_df[, c("chr_no", "pos", "ref"), with=FALSE])))
 
   setkey(df1, chr_no, pos)
   setkey(ref_df, chr_no, pos)
@@ -107,10 +98,10 @@ generate_new_ids <- function(df) {
 #' different studies
 #' @param  ref_tsv_file_path A tsv refernce file (absolute)path 
 execute_script <- function(in_csv_file_path, 
-                 in_ref_tsv_file_path, 
-                 out_snp_name_annotated_study_snps_file_path,
-                 in_ref_snps_dir,
-                 out_combine_ref_snp_tsv_file_path) {
+                           in_ref_tsv_file_path, 
+                           out_snp_name_annotated_study_snps_file_path,
+                           in_ref_snps_dir,
+                           out_combine_ref_snp_tsv_file_path) {
   study_data <- fread(in_csv_file_path, sep=",", sep2="auto", header=T, na.strings="NA",
                       stringsAsFactors = FALSE, verbose =T)
   ref_data <- fread(in_ref_tsv_file_path, sep="\t", header=T, na.strings="NA",

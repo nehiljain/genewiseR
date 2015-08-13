@@ -6,8 +6,6 @@
 #' pgi_execute_map_snp_to_genes( in_genome_data_file_path = "/home/data/nehil_genome_p_adj_snp_annotated_study.tsv", 
 #' in_ref_gene_id_file_path = "/home/data/reference/77/cattle_gene_list-UMD3.1.77.txt",
 #' out_snps_in_genes_file_path = "/home/data/cattle_gene_level.tsv")
-
-
 pgi_execute_map_snp_to_genes <- function (in_genome_data_file_path, sep1, 
                      in_ref_gene_id_file_path, sep2, 
                      out_snps_in_genes_file_path, sep3, 
@@ -55,13 +53,6 @@ map_snps_to_gene <- function(genome_dt, ref_dt, window_size=1000) {
   result_dt <- foverlaps(genome_dt, ref_dt, type="within", nomatch = 0L)
   return(result_dt)
 } 
-
-# in_genome_data_file_path = "/home/kasia/coderepo/genewise/p_adjusted_genome.gwas"
-# sep1 = ","
-# in_ref_gene_id_file_path = "/home/data/tmp/mouse_gene_list-GRCm38.77-mm10.txt"
-# sep2 = ","
-# out_snps_in_genes_file_path="/home/data/tmp/all_snps_in_genes.tsv"
-# sep3="\t"
 
 
 

@@ -9,11 +9,12 @@ License: What license is it under?
 VignetteBuilder: knitr
 LazyData: true
 Imports: data.table (>= 1.9.5),
-    plyr,
+    plyr (>= 1.7.1),
     dplyr,
     assertthat,
     stringr,
     Hmisc,
     futile.logger (>= 1.3.7),
     R.utils
-Suggests: knitr
+Suggests: knitr,
+    testthat
