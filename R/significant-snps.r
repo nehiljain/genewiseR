@@ -39,6 +39,7 @@ get_nlp <- function(df, column_name, out_file_path = NULL) {
 get_max_and_mean <- function(df, column_name, out_file_path = NULL) { 
   
   assert_that(all(column_name %in% names(df)))
+  
   df[is.na(df[,column_name]), column_name] <- 0
   max_column <- paste0( "chr_max_",column_name)
   mean_column <- paste0( "chr_mean_",column_name)
@@ -162,7 +163,9 @@ get_topX_subset <- function(df, column_name, percent = 25) {
 get_topQ <- function(df, column_name, threshold = 25, out_file_path = NULL) {
   assert_that(is.data.table(df))
   assert_that( all(column_name %in% names(df)))
-#   print(str(df))
+  assert_that(is.numeric(threshold))
+  
+  
   result_sign_snp_topq_df <- ddply(df, "ensemble_gene_id", function(df) {
 #       print(str(df))
     return(get_quartile(df, column_name, threshold))
