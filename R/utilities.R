@@ -10,7 +10,7 @@
 #' @param header Boolean value of if the header needs to be considered
 #' @param col_names Character vector to replace the header with a custom column name.
 #' @param Outputl File path - absolute path. By default its null and can be omitted. Produces a tsv file.
-combine_files_in_dir <- function(dir_path, header = F, col_names = NULL, out_file_path = NULL) {
+dir_rbind <- function(dir_path, header = F, col_names = NULL, out_file_path = NULL) {
   assert_that(isDirectory(dir_path))
   filename_list <- list.files(dir_path, full.names = T)
   

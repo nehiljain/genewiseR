@@ -28,7 +28,7 @@ snp_selection <- function(snps_data, ld_blocks_file_path, significance_threshold
   snps_data[,chr_no := as.character(chr_no)]
   
   if (significance_threshold > 0) {
-    cat("significant snps only\n Threshold: ",significance_threshold, "\n ", p_val_col_name )
+    flog.debug(sprintf("\nsignificant snps only\n Threshold: %i", p_val_col_name))
     snps_data <- get_significant_snps(snps_data, significance_threshold, p_val_col_name)
   }
   
