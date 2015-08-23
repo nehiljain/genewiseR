@@ -2,7 +2,7 @@ context("Gene Statistics")
 
 test_that("topQ for each gene", {
   flog.info(getwd())
-  gene_df <- fread("../../mock_data/genes_nlp.tsv", sep="\t", sep2="auto", header=T, na.strings="NA", stringsAsFactors = FALSE)
+  gene_df <- fread("mock_data/genes_nlp.tsv", sep="\t", sep2="auto", header=T, na.strings="NA", stringsAsFactors = FALSE)
   
   top1 <- get_topQ(df = gene_df, threshold = 1, column_name = "cmh_p_val.p_adj_genome_wide.nlp")
   top50 <- get_topQ(df = gene_df, threshold = 50, column_name = "cmh_p_val.p_adj_genome_wide.nlp")
