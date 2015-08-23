@@ -23,22 +23,31 @@ dir_rbind <- function(dir_path, header = F, col_names = NULL, out_file_path = NU
     col_names <- seq(1:dim(combine_data)[1], by=1)
   }
   
+  flog.info(paste0("reading "))
   
-  for(l in filename_list) {
-    cat("reading:",l)
+  number_of_cpus <- detectCores(all.tests = T, logical = T)
+  cl <- makeCluster(number_of_cpus - 1)  
+  registerDoParallel(cl)
+  
+  combine_data <- foreach(l = filename_list, .packages='data.table', .combine = rbind)  %dopar% {
     data <- fread(l, sep="\t", header = header, na.strings="NA",
                   stringsAsFactors = FALSE, verbose =T)
-    combine_data <- rbind(combine_data, data)
+    data
   }
   
-  cat("reading over",l)
+  stopCluster(cl)
+  
+
   combine_data <- unique(combine_data)
+  flog.info(paste0("reading over",filename_list))
+  flog.info(paste0("Out Dataframe : rows ",nrow(combine_data), " and cols : ", ncol(combine_data)))
+  
   
   if (is.null(header) & is.null(col_names)) {
     warning("Header and Col Names are both NULL")
-    setnames(combine_data, names(combine_data), norm_var_names(col_names))
+    setnames(combine_data, names(combine_data), col_names)
   } else {
-    setnames(combine_data, names(combine_data), norm_var_names(names(combine_data)))
+    setnames(combine_data, names(combine_data), names(combine_data))
   }
   if (!is.null(out_file_path)) {
     write.table(x = combine_data, file=out_file_path, quote = F, sep = "\t", row.names = F)
