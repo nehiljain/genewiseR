@@ -21,60 +21,7 @@ get_snp_ids <- function(df1, ref_df) {
   return(result_df)
 }
 
-#' This function normalises the input string vector
-#' _ and small case output, no spaces, no . etc
-#' @param a character vector of names
-#' @return a normalised character vector of names
-norm_var_names <- function(vars, sep="_") {
-  if (sep == ".") sep <- "\\."
-  
-  # Replace all _ and . and ' ' with the nominated separator.
-  
-  pat  <- '_|\\.| |,'
-  rep  <- sep
-  vars <- stringr::str_replace_all(vars, pat, rep)
-  
-  # Replace any all capitals words with Initial capitals
-  
-  pat  <- stringr::regex('(?<!\\p{Lu})(\\p{Lu})(\\p{Lu}*)')
-  rep  <- '\\1\\L\\2'
-  vars <- stringr::str_replace_all(vars, pat, rep)
-  
-  # Replace any capitals not at the beginning of the string with _ 
-  # and then the lowercase letter.
-  
-  pat  <- stringr::regex('(?<!^)(\\p{Lu})')
-  rep  <- paste0(sep, '\\L\\1')
-  vars <- stringr::str_replace_all(vars, pat, rep)
-  
-  # WHY DO THIS? Replace any number sequences not preceded by an
-  # underscore, with it preceded by an underscore. The (?<!...) is a
-  # lookbehind operator.
-  
-  pat  <- stringr::regex(paste0('(?<![', sep, '\\p{N}])(\\p{N}+)'))
-  rep  <- paste0(sep, '\\1')
-  vars <- stringr::str_replace_all(vars, pat, rep)
-  
-  # Remove any resulting initial or trailing underscore or multiples:
-  #
-  # _2level -> 2level
-  
-  vars <- stringr::str_replace(vars, "^_+", "")
-  vars <- stringr::str_replace(vars, "_+$", "")
-  vars <- stringr::str_replace(vars, "__+", "_")
-  
-  # Convert to lowercase
-  
-  vars <- tolower(vars)
-  
-  # Remove repeated separators.
-  
-  pat  <- paste0(sep, "+")
-  rep  <- sep
-  vars <- stringr::str_replace_all(vars, pat, rep)
-  
-  return(vars)
-}
+
 
 
 

@@ -11,3 +11,13 @@ test_that('rbind files', {
   expect_true(ncol(rbind_data) == ncol(test3))
   rm(rbind_data, test2, test3, test4)
 })
+
+
+context('Utils')
+
+test_that('normalise variable names', {
+  test_str <- c("asdf Bads", "a-s.d{fa", "df$pct.spent")
+  test_str <- norm_var_names(test_str)
+  expect_equivalent(test_str, c("asdf_bads","a_s_d_fa","df_pct_spent"))
+  rm(test_str)
+})
