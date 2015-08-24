@@ -11,6 +11,7 @@ LazyData: true
 Imports: data.table (>= 1.9.5),
     plyr (>= 1.7.1),
     dplyr,
+    parallel,
     readr,
     assertthat,
     stringr,
