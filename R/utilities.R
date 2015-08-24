@@ -11,6 +11,7 @@
 #' @param col_names Character vector to replace the header with a custom column name.
 #' @param Outputl File path - absolute path. By default its null and can be omitted. Produces a tsv file.
 dir_rbind <- function(dir_path, header = F, col_names = NULL, out_file_path = NULL) {
+  
   assert_that(isDirectory(dir_path))
   filename_list <- list.files(dir_path, full.names = T)
   
@@ -50,6 +51,7 @@ dir_rbind <- function(dir_path, header = F, col_names = NULL, out_file_path = NU
     setnames(combine_data, names(combine_data), norm_var_names(names(combine_data)))
   }
   if (!is.null(out_file_path)) {
+    assert_that(is.writeable(out_file_path))
     write.table(x = combine_data, file=out_file_path, quote = F, sep = "\t", row.names = F)
   }
   return(combine_data)
