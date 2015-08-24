@@ -26,7 +26,7 @@ dir_rbind <- function(dir_path, header = F, col_names = NULL, out_file_path = NU
   flog.info(paste0("reading "))
   
   number_of_cpus <- detectCores(all.tests = T, logical = T)
-  cl <- makeCluster(number_of_cpus - 1)  
+  cl <- makeCluster(2)  
   registerDoParallel(cl)
   
   combine_data <- foreach(l = filename_list, .packages='data.table', .combine = rbind)  %dopar% {
