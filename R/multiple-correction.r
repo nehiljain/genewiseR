@@ -1,5 +1,7 @@
 
 #' This function add a new column to the datatable created by bonferroni correction
+#' should have a column 'chr' which is integers only
+#' 
 #' the column name is p_adj_genome.
 #'  
 #' @param in_un_adj_p_val_snps_data_file_path is tab separated filepath. This is the file with 
@@ -10,9 +12,15 @@
 
 p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, col_names , out_file_path=NULL ) {
   
+
+  
   assert_that(is.readable(in_un_adj_p_val_snps_data_file_path))
   snp_stats_dt <- fread(in_un_adj_p_val_snps_data_file_path, sep="\t", sep2="auto", header=T, na.strings="NA",
                           stringsAsFactors = FALSE, verbose =T)
+  
+  if (!is.integer(snp_stats_dt[,chr])) {
+    stop(paste0("The columns 'chr' should be integer, change 'X', 'Y' to numbers and remove any other characters in the column values"))
+  }
   
   expect_true( col_names %in% names(snp_stats_dt), info = "The column names are not present in the datatable", label = NULL)
   length_dt <- nrow(snp_stats_dt)
@@ -23,6 +31,7 @@ p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, col_na
   }
   
   setnames(snp_stats_dt, names(snp_stats_dt), norm_var_names(names(snp_stats_dt)))
+
   if (!is.null(out_file_path)) {
     assert_that(is.writeable(out_file_path))
     flog.debug(sprintf("Output File path %s", out_file_path))
@@ -31,6 +40,32 @@ p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, col_na
   return(snp_stats_dt)
  
 }
+
+
+
+#' column names in order chromosome number, snp id, snp position or base pair, pvalue and adjusted pvalue
+#' 
+
+p_adjustment_summary <- function(df, col_names) {
+  
+  df <- data.table(df)
+  assert_that(is.data.table(df))
+  assert_that(stringr::str_detect(toupper(col_names[1]), "CHR"))
+  # assert_that(is.character(df[,.(col_names[2])]))
+  # assert_that(is.numeric(df[,.(col_names[3])]) | is.integer(df[,.(col_names[3])]))
+  assert_that(stringr::str_detect(toupper(col_names[4]), "P"))
+  
+  setnames(df, col_names, c("CHR","SNP","BP","P"))
+
+  manhattan(df)
+  qq(df$P)
+  qplot(df$P) + theme_bw()
+  
+}
+
+
+
+
 
 
 #' This function add a new column to the datatable created by bonferroni correction
