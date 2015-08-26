@@ -3,24 +3,23 @@
 \name{p_adjustment_genomewide}
 \alias{p_adjustment_genomewide}
 \title{This function add a new column to the datatable created by bonferroni correction
-the column name is p_adj_genome. COLUMN required cmh_p_val}
+should have a column 'chr' which is integers only}
 \usage{
-p_adjustment_genomewide(in_un_adj_p_val_snps_data_file_path,
-  out_file_path = NULL, col_names)
+p_adjustment_genomewide(in_un_adj_p_val_snps_data_file_path, col_names,
+  out_file_path = NULL)
 }
 \arguments{
 \item{in_un_adj_p_val_snps_data_file_path}{is tab separated filepath. This is the file with
 unadjusted p valu columns.}
 
-\item{out_file_path}{Optional parameter. The file path to store the output.}
-
 \item{col_names}{Vector of columns to be acted upon}
+
+\item{out_file_path}{Optional parameter. The file path to store the output.}
 }
 \value{
 Datable with additional columns for genomewide correction of each column vector
 }
 \description{
-This function add a new column to the datatable created by bonferroni correction
-the column name is p_adj_genome. COLUMN required cmh_p_val
+the column name is p_adj_genome.
 }
 
