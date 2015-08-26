@@ -46,20 +46,24 @@ p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, col_na
 #' column names in order chromosome number, snp id, snp position or base pair, pvalue and adjusted pvalue
 #' 
 
-p_adjustment_summary <- function(df, col_names) {
+p_adjustment_summary <- function(df, chr_name, snp_id_name, snp_pos_name, p_val_name, report_file_name=NULL) {
   
   df <- data.table(df)
   assert_that(is.data.table(df))
-  assert_that(stringr::str_detect(toupper(col_names[1]), "CHR"))
-  # assert_that(is.character(df[,.(col_names[2])]))
-  # assert_that(is.numeric(df[,.(col_names[3])]) | is.integer(df[,.(col_names[3])]))
-  assert_that(stringr::str_detect(toupper(col_names[4]), "P"))
+  assert_that(is.numeric(df[, get(chr_name)]))
+  assert_that(is.character(df[, get(snp_id_name)]))
+  assert_that(is.numeric(df[, get(snp_pos_name)]))
+  assert_that(is.numeric(df[, get(p_val_name)]))
   
-  setnames(df, col_names, c("CHR","SNP","BP","P"))
-
+  setnames(df, c(chr_name,snp_id_name,snp_pos_name,p_val_name), c("CHR","SNP","BP","P"))
+  
+  
+  # plot("p-val-ajustment-summary.pdf")
   manhattan(df)
   qq(df$P)
-  qplot(df$P) + theme_bw()
+  qplot(df$P) 
+  dev.copy(pdf,"p-val-ajustment-summary.pdf", width=4, height=4)
+  dev.off()
   
 }
 
