@@ -122,10 +122,17 @@ dir_merge <- function(dir_path, col_names, sep = "\t", out_file_path = NULL) {
 
 
 
+#' Converts character vector to sanitised varirable names
+#' 
 #' This function normalises the input string vector
 #' _ and small case output, no spaces, no . etc
-#' @param a character vector of names
+#' 
+#' @param a character vector, usually of header of data frames
 #' @return a normalised character vector of names
+#' 
+#' @examples 
+#' 
+#' norm_var_names(c("asdf#asfadf$ asdfa -", "aff _234RR_RR+2"))
 norm_var_names <- function(vars, sep="_") {
   
   assert_that(is.character(vars))

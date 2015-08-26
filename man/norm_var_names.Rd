@@ -2,13 +2,12 @@
 % Please edit documentation in R/utilities.R
 \name{norm_var_names}
 \alias{norm_var_names}
-\title{This function normalises the input string vector
-_ and small case output, no spaces, no . etc}
+\title{Converts character vector to sanitised varirable names}
 \usage{
 norm_var_names(vars, sep = "_")
 }
 \arguments{
-\item{a}{character vector of names}
+\item{a}{character vector, usually of header of data frames}
 }
 \value{
 a normalised character vector of names
@@ -16,5 +15,8 @@ a normalised character vector of names
 \description{
 This function normalises the input string vector
 _ and small case output, no spaces, no . etc
+}
+\examples{
+norm_var_names(c("asdf#asfadf$ asdfa -", "aff _234RR_RR+2"))
 }
 
