@@ -2,16 +2,19 @@
 % Please edit documentation in R/get-snp-ids.r
 \name{generate_new_ids}
 \alias{generate_new_ids}
-\title{The function takes in the data frame after attaching snp ids from the ref.
-using get_snp_ids(). The function computes the length of missing snp_name}
+\title{Get new snp ids for snps not found in ref db.}
 \usage{
-generate_new_ids(df)
+generate_new_ids(df, prefix = "dal_snp", col_name = "snp_id")
 }
 \arguments{
+\item{prefix,}{a chacracter value used as prefix to numerical index of the snps, default is 'dal_snp'}
+
+\item{col_name,}{a character value used as column name of the snp ids}
+
 \item{the}{dataframe df}
 }
 \value{
-a dataframe with all missing snp names changed to pgi_dal_snp1,...
+a datatable with all missing snp names changed to dal_snp1, dal_snp2,...
 }
 \description{
 The function takes in the data frame after attaching snp ids from the ref.

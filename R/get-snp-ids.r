@@ -26,17 +26,22 @@ get_snp_ids <- function(df1, ref_df) {
 
 
 
+#' Get new snp ids for snps not found in ref db.
+#' 
+#' 
 #' The function takes in the data frame after attaching snp ids from the ref. 
 #' using get_snp_ids(). The function computes the length of missing snp_name
 #' @param the dataframe df
-#' @return a dataframe with all missing snp names changed to pgi_dal_snp1,...
+#' @param prefix, a chacracter value used as prefix to numerical index of the snps, default is 'dal_snp'
+#' @param col_name, a character value used as column name of the snp ids
+#' @return a datatable with all missing snp names changed to dal_snp1, dal_snp2,...
 
-generate_new_ids <- function(df) {
+generate_new_ids <- function(df, prefix = "dal_snp", col_name = "snp_id") {
   df <- as.data.table(df)
-  length_missing_ids <- dim(df[is.na(alt.ref) & is.na(snp_name)])[1]
-  custom_names <- rep("pgi_dal_snp", length_missing_ids)
+  length_missing_ids <- dim(df[is.na(alt.ref) & is.na(get(col_name))])[1]
+  custom_names <- rep(,length_missing_ids)
   custom_names <- paste0(custom_names, seq(1,length_missing_ids))
-  df[is.na(alt.ref) & is.na(snp_name), snp_name := custom_names]
+  df[is.na(alt.ref) & is.na(get(col_name)), (col_name) := custom_names]
   return(df)
 }
 

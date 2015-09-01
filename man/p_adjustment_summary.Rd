@@ -4,7 +4,8 @@
 \alias{p_adjustment_summary}
 \title{column names in order chromosome number, snp id, snp position or base pair, pvalue and adjusted pvalue}
 \usage{
-p_adjustment_summary(df, col_names)
+p_adjustment_summary(df, chr_name, snp_id_name, snp_pos_name, p_val_name,
+  report_file_name = NULL)
 }
 \description{
 column names in order chromosome number, snp id, snp position or base pair, pvalue and adjusted pvalue
