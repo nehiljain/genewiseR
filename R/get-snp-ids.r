@@ -17,7 +17,7 @@ get_snp_ids <- function(df1, ref_df) {
   
   result_df <- merge(x = df1, y = ref_df, all.x = T,
                      by = c("chr_no" , "pos" , "ref"), suffixes=c(".study", ".ref"))
-
+  setnames(snp_stats_dt, names(snp_stats_dt), norm_var_names(names(snp_stats_dt)))
   return(result_df)
 }
 
@@ -36,13 +36,20 @@ get_snp_ids <- function(df1, ref_df) {
 #' @param col_name, a character value used as column name of the snp ids
 #' @return a datatable with all missing snp names changed to dal_snp1, dal_snp2,...
 
-generate_new_ids <- function(df, prefix = "dal_snp", col_name = "snp_id") {
-  df <- as.data.table(df)
-  length_missing_ids <- dim(df[is.na(alt.ref) & is.na(get(col_name))])[1]
-  custom_names <- rep(,length_missing_ids)
-  custom_names <- paste0(custom_names, seq(1,length_missing_ids))
-  df[is.na(alt.ref) & is.na(get(col_name)), (col_name) := custom_names]
-  return(df)
+generate_new_ids <- function(df, prefix_str = "dal_snp", col_name = "snp_id") {
+  dt <- as.data.table(df)
+  empty_columns_names <- dt[,!nzchar(get(col_name))]
+  flog.debug(paste0("number of missing ids found", sum(empty_columns_names)))
+  length_missing_ids <- sum(empty_columns_names)
+  flog.debug(paste0("number of missing ids found", length_missing_ids))
+  if (length_missing_ids > 0) {
+    custom_names <- rep(prefix_str,length_missing_ids)
+    custom_names <- paste0(custom_names, seq(1,length_missing_ids))
+    flog.debug(paste0("Missing ids replaced with custom names", length_missing_ids, custom_names[0]))
+    dt[empty_columns_names, (col_name) := custom_names]
+  }
+  setnames(dt, names(dt), norm_var_names(names(dt)))
+  return(dt)
 }
 
 #' execute_script() the driver function for the script

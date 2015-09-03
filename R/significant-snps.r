@@ -92,7 +92,7 @@ get_quartile <- function(df, column_name, quartile = 25) {
   df[, (topq_column_name) := mean(get(column_name), na.rm = TRUE)]
   df <- df[, .(ensemble_gene_id, get(topq_column_name))]  
   setnames(df, "V2", topq_column_name)
-  
+  setnames(df, names(df), norm_var_names(names(df)))
   return(df)
 }
 
@@ -113,7 +113,7 @@ get_topX_sample <- function(df, column_name, quartile = 25) {
   df[1:top_subset, (topq_column_name) := mean(nlp, na.rm = TRUE)]
   df <- df[, .(ensemble_gene_id, get(topq_column_name))]  
   setnames(df, "V2", topq_column_name)
-  
+  setnames(snp_stats_dt, names(snp_stats_dt), norm_var_names(names(snp_stats_dt)))
   return(df)
 }
 
