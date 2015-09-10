@@ -1,4 +1,4 @@
-Package: genewise
+Package: genewiseR
 Title: GWAS pipeline, 
 Version: 0.0.0.9000
 Authors@R: person("Nehil", "Jain", , "jain.nehil@gmail.com", role = c("aut","cre"))
