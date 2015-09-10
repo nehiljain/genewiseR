@@ -4,14 +4,14 @@
 \alias{generate_new_ids}
 \title{Get new snp ids for snps not found in ref db.}
 \usage{
-generate_new_ids(df, prefix = "dal_snp", col_name = "snp_id")
+generate_new_ids(df, prefix_str = "dal_snp", col_name = "snp_id")
 }
 \arguments{
-\item{prefix,}{a chacracter value used as prefix to numerical index of the snps, default is 'dal_snp'}
-
 \item{col_name,}{a character value used as column name of the snp ids}
 
 \item{the}{dataframe df}
+
+\item{prefix,}{a chacracter value used as prefix to numerical index of the snps, default is 'dal_snp'}
 }
 \value{
 a datatable with all missing snp names changed to dal_snp1, dal_snp2,...

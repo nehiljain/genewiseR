@@ -6,9 +6,11 @@ test_that("topQ for each gene", {
   
   top1 <- get_topQ(df = gene_df, threshold = 1, column_name = "cmh_p_val.p_adj_genome_wide.nlp")
   top50 <- get_topQ(df = gene_df, threshold = 50, column_name = "cmh_p_val.p_adj_genome_wide.nlp")
-  
+  str(top1)
   expect_true(length(unique(gene_df$ensemble_gene_id)) == length(unique(top50$ensemble_gene_id)))
-
+  
+  r <- explore_topQ(df = gene_df, column_name = "cmh_p_val.p_adj_genome_wide.nlp")
+  
   #cleanup after yourself
   rm(gene_df, top1, top50)
   

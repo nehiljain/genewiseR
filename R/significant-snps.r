@@ -1,10 +1,9 @@
-library(Hmisc)
-library(assertthat)
-
 
 #' if the out file path is not given then it returns the datatable else writes a tsv on the new path
 get_significant_snps <- function(df, threshold, column_name, out_file_path = NULL) {
-  
+  if (!is.data.table(df)) {
+    df <- data.table(df)
+  }
   see_if(is.number(threshold))
 #   assert_that( column_name %in% names(df), info = "The column names are not present in the datatable", label = NULL)
   
@@ -21,6 +20,9 @@ get_significant_snps <- function(df, threshold, column_name, out_file_path = NUL
 
 #' if the out file path is not given then it returns the datatable else writes a tsv on the new path
 get_nlp <- function(df, column_name, out_file_path = NULL) {
+  if (!is.data.table(df)) {
+    df <- data.table(df)
+  }
   
   assert_that(all(column_name %in% names(df)))
   
@@ -37,7 +39,9 @@ get_nlp <- function(df, column_name, out_file_path = NULL) {
 #' calculates snp count, max and mean on given column name and groups all the counts by chromosome
 #' if the out file path is not given then it returns the datatable else writes a tsv on the new path
 get_max_and_mean <- function(df, column_name, out_file_path = NULL) { 
-  
+  if (!is.data.table(df)) {
+    df <- data.table(df)
+  }
   assert_that(all(column_name %in% names(df)))
   
   df[is.na(df[,column_name]), column_name] <- 0
@@ -66,10 +70,6 @@ get_quartile <- function(df, column_name, quartile = 25) {
   
   df <- as.data.frame(df)
   df[is.na(df[,column_name]), column_name] <- 0
-  
-  
-  
-  
   if (dim(df)[1] == 1 | length(unique(df[,column_name])) == 1) {
     
     df$quartile <- df[,column_name]
@@ -98,8 +98,6 @@ get_quartile <- function(df, column_name, quartile = 25) {
 
 
 get_topX_sample <- function(df, column_name, quartile = 25) {
-  
-  
   assert_that(all(column_name %in% names(df)))
   
   df <- as.data.table(df)
@@ -124,11 +122,10 @@ get_topX_sample <- function(df, column_name, quartile = 25) {
 
 
 get_topX_subset <- function(df, column_name, percent = 25) {
-  
-  
   assert_that(sum(column_name %in% names(df)) == length(column_name))
-  
-  df <- as.data.table(df)
+  if (!is.data.table(df)) {
+    df <- data.table(df)
+  }
   df <- df[,.(ensemble_gene_id, nlp = get(column_name))]
   df[is.na(nlp), nlp := 0]
   df[order(-nlp)]
@@ -161,21 +158,40 @@ get_topX_subset <- function(df, column_name, percent = 25) {
 #' Note: Internally calls another function get_quartile
 
 get_topQ <- function(df, column_name, threshold = 25, out_file_path = NULL) {
-  assert_that(is.data.table(df))
+  if (!is.data.table(df)) {
+    df <- data.table(df)
+  }
   assert_that( all(column_name %in% names(df)))
   assert_that(is.numeric(threshold))
   
-  
   result_sign_snp_topq_df <- ddply(df, "ensemble_gene_id", function(df) {
-#       print(str(df))
     return(get_quartile(df, column_name, threshold))
   })
-  
   result_sign_snp_topq_df <- unique(result_sign_snp_topq_df)
-#   str(result_sign_snp_topq_df)
+
   if (!is.null(out_file_path)) {
     write.table(x = result_sign_snp_topq_df, file=out_file_path, quote = F, sep = "\t", row.names = F)
   }
   return(result_sign_snp_topq_df)
 }
 
+
+
+explore_topQ <- function(df, column_name, out_dir) {
+  if (!is.data.table(df)) {
+    df <- data.table(df)
+  }
+  
+  threshold_list <- c(1,5,10,20,15,50)
+  
+  results <- foreach(i=threshold_list, 
+                     .export=c('get_topQ', 'get_quartile'), 
+                     .packages=c('Hmisc','dplyr','data.table','plyr'),
+                     .combine=cbind) %dopar% {  
+    # do something cool
+    topq_df <- get_topQ(df = df, threshold = i, column_name = column_name)
+    topq_df[,2]
+  }
+
+  results
+}
