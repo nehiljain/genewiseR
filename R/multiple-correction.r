@@ -23,7 +23,7 @@ p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, col_na
     max_int_chr <- max(as.numeric(max_int_chr))
     snp_stats_dt[tolower(chr) == tolower('X'), chr := (max_int_chr + 1)]
     snp_stats_dt[tolower(chr) == tolower('Y'), chr := (max_int_chr + 2)]
-    snp_stats_dt[, chr := as.numeric(chr)]
+    snp_stats_dt[, chr := as.integer(chr)]
     if (!is.integer(snp_stats_dt[,chr])) {
       stop(paste0("The columns 'chr' should be integer, change 'X', 'Y' to numbers and remove any other characters in the column values"))
     }
