@@ -19,7 +19,14 @@ p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, col_na
                           stringsAsFactors = FALSE, verbose =T)
   
   if (!is.integer(snp_stats_dt[,chr])) {
-    stop(paste0("The columns 'chr' should be integer, change 'X', 'Y' to numbers and remove any other characters in the column values"))
+    max_int_chr <- snp_stats_dt[!is.na(as.numeric(chr)), chr]
+    max_int_chr <- max(as.numeric(max_int_chr))
+    snp_stats_dt[tolower(chr) == tolower('X'), chr := (max_int_chr + 1)]
+    snp_stats_dt[tolower(chr) == tolower('Y'), chr := (max_int_chr + 2)]
+    snp_stats_dt[, chr := as.numeric(chr)]
+    if (!is.integer(snp_stats_dt[,chr])) {
+      stop(paste0("The columns 'chr' should be integer, change 'X', 'Y' to numbers and remove any other characters in the column values"))
+    }
   }
   
   expect_true( col_names %in% names(snp_stats_dt), info = "The column names are not present in the datatable", label = NULL)

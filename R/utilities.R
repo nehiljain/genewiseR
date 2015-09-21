@@ -48,12 +48,16 @@ dir_rbind <- function(dir_path, header = F, col_names = NULL, out_file_path = NU
   flog.info(paste0("Out Dataframe : rows ",nrow(combine_data), " and cols : ", ncol(combine_data)))
   
   
-  if (is.null(header) & is.null(col_names)) {
-    warning("Header and Col Names are both NULL")
-    setnames(combine_data, names(combine_data), norm_var_names(col_names))
-  } else {
+  if (is.null(header) & !is.null(col_names)) {
+    flog.info(paste0("naming columns",norm_var_names(names(combine_data))))
+    data.table::setnames(combine_data, names(combine_data), norm_var_names(col_names))
+  } else if(!is.null(header)) {
+    flog.info(paste0("naming columns",norm_var_names(names(combine_data))))
     setnames(combine_data, names(combine_data), norm_var_names(names(combine_data)))
+  } else if (is.null(header) & is.null(col_names)) {
+    warning("Header and Col Names are both NULL")
   }
+  
   if (!is.null(out_file_path)) {
     assert_that(is.writeable(out_file_path))
     write.table(x = combine_data, file=out_file_path, quote = F, sep = "\t", row.names = F)
