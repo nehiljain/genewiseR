@@ -6,4 +6,4 @@
 # Setup
 
 1. library(devtools)
-2. install_github('nehiljain/genewise')
+2. install_github('nehiljain/genewiseR')
