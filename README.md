@@ -9,7 +9,7 @@
 2. install_github('nehiljain/genewiseR')
 3. 
 
-1.get_snp_ids - To get the snp ides of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele
+1. get_snp_ids - To get the snp ides of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele
 2. generate_new_ids - Get new snp ids for snps not found in ref db.
 3. p_adjustment_genomewide - genomewide multiple correction [fdr hard coded]
 4. p_adjustment_chrwide - chromosomewide multiple correction any method (bon, fdr, etc)
