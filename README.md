@@ -27,18 +27,20 @@
 16. norm_var_names - Converts character vector to sanitised varirable names
 
 order:
-14. and 15? same function?
-1.
-2.
-3.
-4. it is additional option? not always required?
-5.
-13.
-6. is this function was used after Hein correction of topQ? is it only statistic?
-7.
-8.
-9. where x is? 1,5,10,20,25,50 as default?
-10. ................ 9 and 10 same function (its 9 for top25%)
-12.
+- [x] 14. and 15? same function?
+- [ ] 1.
+- [ ] 2.
+- [ ] 3.
+- [ ] 4. it is additional option? not always required?
+- [ ] 5.
+- [ ] 13.
+- [ ] 6. is this function was used after Hein correction of topQ? is it only statistic?
+- [ ] 7.
+- [ ] 8.
+- [ ] 9. where x is? 1,5,10,20,25,50 as default?
+- [ ] 10. ................ 9 and 10 same function (its 9 for top25%)
+- [ ] 12.
+
+based on indel dataset
 
 
