@@ -1,30 +1,42 @@
 
 
-#' To get the snp ides of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele 
+#' To get the Snp IDs of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele 
 #' using these conditions rows are joined between the two dataframes provided to this function
-#' @param  df1 A csv file (absolute)path  with data about snps and stats from different studies
-#' @param  ref_df A csv refernce file (absolute)path 
+#' @param  data_path A csv file path (absolute) with data about snps and stats from different studies
+#' @param  ref_df A csv refernce file path (absolute)
 #' @return returns a data table with all the ref. snp ids joined to each row
 
-get_snp_ids <- function(df1, ref_df) {
+get_snp_ids <- function(df1, ref_df, out_file_path=NULL) {
+  
+  if(!(data_path)) {
+    df1 <- read_csv(data_path)
+    df1 <- data.table(df1)
+  }
+  
+  if(!(ref_df)) {
+    ref_df <- read_csv(data_path)
+    ref_df <- data.table(ref_df)
+  }
+  
   assert_that(is.data.table(df1))
   assert_that(is.data.table(ref_df))
+  
   df1 <- unique(df1, by=c("chr_no", "pos", "ref"))
   ref_df <- unique(ref_df, by=c("chr_no", "pos", "ref"))
 
   setkey(df1, chr_no, pos)
   setkey(ref_df, chr_no, pos)
-  
   result_df <- merge(x = df1, y = ref_df, all.x = T,
                      by = c("chr_no" , "pos" , "ref"), suffixes=c(".study", ".ref"))
-  setnames(snp_stats_dt, names(snp_stats_dt), norm_var_names(names(snp_stats_dt)))
+  setnames(result_df, names(result_df), norm_var_names(names(result_df)))
+  
+  if (!is.null(out_file_path)) {
+    assert_that(is.writeable(out_file_path))
+    flog.debug(sprintf("Output File path %s", out_file_path))
+    write.table(x = result_df, file=out_file_path, quote = F, sep = "\t", row.names = F)
+  }
   return(result_df)
 }
-
-
-
-
-
 
 #' Get new snp ids for snps not found in ref db.
 #' 

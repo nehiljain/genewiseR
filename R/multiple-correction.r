@@ -8,7 +8,7 @@
 #' unadjusted p valu columns.    
 #' @param col_names Vector of columns to be acted upon
 #' @param out_file_path Optional parameter. The file path to store the output.
-#' @return Datable with additional columns for genomewide correction of each column vector
+#' @return DataTable with additional columns for genomewide correction of each column vector
 
 p_adjustment_genomewide <- function (in_un_adj_p_val_snps_data_file_path, col_names , out_file_path=NULL ) {
   

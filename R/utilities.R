@@ -41,18 +41,17 @@ dir_rbind <- function(dir_path, header = F, col_names = NULL, out_file_path = NU
   }
   
   stopCluster(cl)
-  
 
   combine_data <- unique(combine_data)
   flog.info(paste0("reading over ",filename_list))
   flog.info(paste0("Out Dataframe : rows ",nrow(combine_data), " and cols : ", ncol(combine_data)))
   
   
-  if (is.null(header) & !is.null(col_names)) {
-    flog.info(paste0("naming columns",norm_var_names(names(combine_data))))
+  if (!header & !is.null(col_names)) {
+    flog.info(paste0("naming columns because Col name -",norm_var_names(col_names)))
     data.table::setnames(combine_data, names(combine_data), norm_var_names(col_names))
   } else if(!is.null(header)) {
-    flog.info(paste0("naming columns",norm_var_names(names(combine_data))))
+    flog.info(paste0("naming columns because header is not null",norm_var_names(names(combine_data))))
     setnames(combine_data, names(combine_data), norm_var_names(names(combine_data)))
   } else if (is.null(header) & is.null(col_names)) {
     warning("Header and Col Names are both NULL")
@@ -77,7 +76,7 @@ dir_rbind <- function(dir_path, header = F, col_names = NULL, out_file_path = NU
 #'  @param out_file_path Absolute path of for writing the output. This is Optional
 #'  
 #'  @return a data.table of all the combined files
-#'  
+#'  @example dir_rbind(~/data/", header = F, col_names = c("chr","pos","allele","p_value"))
 #'
 
 dir_merge <- function(dir_path, col_names, sep = "\t", out_file_path = NULL) {
@@ -138,7 +137,6 @@ dir_merge <- function(dir_path, col_names, sep = "\t", out_file_path = NULL) {
 #' 
 #' norm_var_names(c("asdf#asfadf$ asdfa -", "aff _234RR_RR+2"))
 norm_var_names <- function(vars, sep="_") {
-  
   assert_that(is.character(vars))
   
   if (sep == ".") sep <- "\\."
