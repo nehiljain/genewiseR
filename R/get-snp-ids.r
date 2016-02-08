@@ -70,9 +70,9 @@ get_snp_ids <- function(study_df,
   data.table::setnames(result_df, names(result_df), norm_var_names(names(result_df)))
   
   if (!is.null(out_file_path)) {
-    assert_that(is.writeable(out_file_path))
+    # assert_that(is.writeable(out_file_path))
     flog.debug(sprintf("Output File path %s", out_file_path))
-    write.table(x = result_df, file=out_file_path, quote = F, sep = "\t", row.names = F)
+    write_tsv(x = result_df, file=out_file_path)
   }
   return(result_df)
 }
