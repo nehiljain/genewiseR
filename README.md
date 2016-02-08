@@ -1,14 +1,17 @@
 # genewise
 
-[![Build Status](https://travis-ci.org/nehiljain/genewise.svg?branch=master)](https://travis-ci.org/nehiljain/genewiseR)
 
+<SOme text to describe genewiseR>
 
 # Setup
 
 1. library(devtools)
 2. install_github('nehiljain/genewiseR')
-3. 
 
+
+
+
+# List of functions exported by the package
 1. get_snp_ids - To get the snp ides of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele
 2. generate_new_ids - Get new snp ids for snps not found in ref db.
 3. p_adjustment_genomewide - genomewide multiple correction [fdr hard coded]
@@ -26,21 +29,28 @@
 15. dir_merge - Combines all the files in a directory using a Full Outer Join `merge(.., all=T)`
 16. norm_var_names - Converts character vector to sanitised varirable names
 
-order:
-- [x] 14. and 15? same function?
-- [ ] 1.
-- [ ] 2.
-- [ ] 3.
-- [ ] 4. it is additional option? not always required?
-- [ ] 5.
-- [ ] 13.
-- [ ] 6. is this function was used after Hein correction of topQ? is it only statistic?
-- [ ] 7.
-- [ ] 8.
-- [ ] 9. where x is? 1,5,10,20,25,50 as default?
-- [ ] 10. ................ 9 and 10 same function (its 9 for top25%)
-- [ ] 12.
+## order of execution:
 
-based on indel dataset
+- 14 and 15? same function?
+- 1
+- 2
+- 3
+- 4 it is additional option? not always required?
+- 5
+- 13
+- 6 is this function was used after Hein correction of topQ? is it only statistic?
+- 7
+- 8
+- 9 where x is? 1,5,10,20,25,50 as default?
+- 10 ................ 9 and 10 same function (its 9 for top25%)
+- 12
 
-- [x] dir_rbind("/Users/nehiljain/code/personal/genewiseR/data/",header = F,col_names = c("chr","pos","allele","p_value"),out_file_path = "/Users/nehiljain/code/personal/genewiseR/data/combined_indel_gwas_result.tsv")
+# Example process based on indel dataset
+
+combine_gwas_df <- dir_rbind("/Users/nehiljain/code/personal/genewiseR_data/raw_data/", 
+header = F,col_names = c("chr_no","snp_pos","allele","p_value"))
+ 
+ref_df <- read_tsv("~/code/personal/genewiseR_data/ref/indels.Bos_taurus.vcf", comment = "##", 
+progress = T, trim_ws = T)
+
+result_df <- get_snp_ids(combine_gwas_df, ref_df )
