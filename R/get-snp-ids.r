@@ -56,14 +56,16 @@ get_snp_ids <- function(study_df,
   chr_col_index <- na.omit(chr_col_index)[1]
   data.table::setnames(study_df, chr_col_index, norm_var_names("snp_pos"))
   
-  str(study_df)
-  str(ref_df)
+  #converting chr_no column to character
+  study_df <- study_df[, chr_no:=as.character(chr_no)]
+  ref_df <- ref_df[, chr_no:=as.character(chr_no)]
+  
   study_df <- unique(study_df, by=c("chr_no", "snp_pos"))
   ref_df <- unique(ref_df, by=c("chr_no", "snp_pos"))
   
   data.table::setkey(study_df, chr_no, snp_pos)
   data.table::setkey(ref_df, chr_no, snp_pos)
-  result_df <- data.table::merge(x = study_df, y = ref_df, all.x = T,
+  result_df <- merge(x = study_df, y = ref_df, all.x = T,
                      by = c("chr_no", "snp_pos"), suffixes=c(".study", ".ref"))
   data.table::setnames(result_df, names(result_df), norm_var_names(names(result_df)))
   
