@@ -1,0 +1,59 @@
+---
+title: "Bioinformatic pipeline to pooled data preparation"
+author: "Kacper Żukowski"
+date: '`r Sys.Date()`'
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
+bibliography: bibliography.bib
+vignette: |
+  %\VignetteIndexEntry{Vignette Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+---
+
+Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+
+- Never uses retina figures
+- Has a smaller default figure size
+- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+
+# Required software
+
+1. to download test data from ncbi -- **ncbi sra toolkit** [link](http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software)  
+2. to trimming raw sequences -- **flexbar** [link](https://github.com/seqan/flexbar/wiki)  
+3. to alignment -- **bwa** [link](http://bio-bwa.sourceforge.net)  
+4. to utilities -- **picard tools** [link](http://broadinstitute.github.io/picard/)  
+5. to utilities and mpileup -- **samtools** [link](http://www.htslib.org)  
+6. to prepare sync data and more -- **popoolation2** [link](http://sourceforge.net/p/popoolation2/wiki/Main/)  
+7. to variant calling -- **freebayes** [link](https://github.com/ekg/freebayes) and **gatk** [link](https://www.broadinstitute.org/gatk/)  
+8. to variant filtration -- **snpsift** [link](http://snpeff.sourceforge.net/SnpSift.html)  
+
+Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+
+# Test dataset
+
+# Pipeline
+
+## Data trimming
+
+
+## Alignment to reference
+
+
+## Aligned data preparation and mpileup
+
+
+## Popoolation2 - the core
+
+
+## Variant calling and filtration
+
+
+## Data reduction and CMH testing as final step to genewiseR
+
+
+# References
+
+
