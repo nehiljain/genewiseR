@@ -43,4 +43,4 @@ order:
 
 based on indel dataset
 
-
+- [x] dir_rbind("/Users/nehiljain/code/personal/genewiseR/data/",header = F,col_names = c("chr","pos","allele","p_value"),out_file_path = "/Users/nehiljain/code/personal/genewiseR/data/combined_indel_gwas_result.tsv")
