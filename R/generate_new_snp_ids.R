@@ -52,10 +52,4 @@ execute_script <- function(in_csv_file_path,
 }
 
 
-# 
-# execute_script(in_csv_file_path = "/home/data/nehil_combine_data/combine_gwas_vcf.csv", 
-#      in_ref_tsv_file_path = "/home/data/nehil_combine_all_chromosome_ref_snps.tsv",
-#      out_snp_name_annotated_study_snps_file_path = "/home/data/nehil_snp_annotated_study_all_snp_ids.tsv",
-#      in_ref_snps_dir = "/home/data/kacper_ref_snp_list/tsv",
-#      out_combine_ref_snp_tsv_file_path = "/home/data/nehil_combine_all_chromosome_ref_snps.tsv"
-#   )
+
