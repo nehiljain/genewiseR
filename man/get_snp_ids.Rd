@@ -5,10 +5,10 @@
 \title{To get the Snp IDs of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele 
 using these conditions rows are joined between the two dataframes provided to this function}
 \usage{
-get_snp_ids(df1, ref_df, out_file_path = NULL)
+get_snp_ids(study_df, ref_df, out_file_path = NULL)
 }
 \arguments{
-\item{ref_df}{A csv refernce file path (absolute)}
+\item{ref_df}{A dataframe object representing vcf file or txt file with annotation columns}
 
 \item{data_path}{A csv file path (absolute) with data about snps and stats from different studies}
 }
@@ -18,5 +18,15 @@ returns a data table with all the ref. snp ids joined to each row
 \description{
 To get the Snp IDs of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele 
 using these conditions rows are joined between the two dataframes provided to this function
+}
+\examples{
+
+combine_gwas_df <- dir_rbind("/Users/nehiljain/code/personal/genewiseR_data/raw_data/", 
+header = F,col_names = c("chr_no","snp_pos","allele","p_value"))
+
+ref_df <- read_tsv("~/code/personal/genewiseR_data/ref/indels.Bos_taurus.vcf", comment = "##", 
+progress = T, trim_ws = T)
+result_df <- get_snp_ids(combine_gwas_df, ref_df )
+
 }
 
