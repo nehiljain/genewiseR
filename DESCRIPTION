@@ -12,10 +12,10 @@ LazyData: true
 Imports:
     data.table (>= 1.9.5),
     plyr (>= 1.7.1),
-    dplyr,
+    dplyr (>= 0.4.2),
     tidyr,
     parallel,
-    readr,
+    readr (>= 0.2.2),
     assertthat,
     stringr,
     Hmisc,
@@ -25,7 +25,8 @@ Imports:
     foreach,
     doParallel,
     futile.logger (>= 1.3.7),
-    R.utils
+    R.utils,
+    fastmatch
 Suggests:
     knitr,
     testthat
