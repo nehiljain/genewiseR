@@ -1,6 +1,11 @@
 
 
-#' To get the Snp IDs of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele 
+#' Get Snp IDs of the variants found in the study dataset. 
+#' 
+#' 
+#' Using the reference database/file and specifically columns chr_no, snp_pos in the db, 
+#' the variants are assigned the snp_ids and NA is added to the variants not found in the 
+#' database. You can use generate_new_snp_ids to get the ids of new variants foudn in your study 
 #' using these conditions rows are joined between the two dataframes provided to this function
 #' @param  data_path A csv file path (absolute) with data about snps and stats from different studies
 #' @param  ref_df A dataframe object representing vcf file or txt file with annotation columns
