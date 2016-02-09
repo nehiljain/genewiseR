@@ -1,7 +1,7 @@
 
 
 #' Get Snp IDs of the variants found in the study dataset. 
-#' 
+#' ####TODO: ADD SOME VISUALISATION OR REPORTING OF HOW MANY SNPS WERE FOUND IN DB< HOW MANY TOTAL AND HOW MANY GENERATED" 
 #' 
 #' Using the reference database/file and specifically columns chr_no, snp_pos in the db, 
 #' the variants are assigned the snp_ids and NA is added to the variants not found in the 
