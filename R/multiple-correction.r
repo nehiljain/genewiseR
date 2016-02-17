@@ -9,6 +9,11 @@
 #' @param col_names Vector of columns to be acted upon
 #' @param out_file_path Optional parameter. The file path to store the output.
 #' @return DataTable with additional columns for genomewide correction of each column vector
+#' 
+#' @example 
+#' 
+#' p_adjustment(study_df = with_ids_dt, col_names = "p_value", level = "chromosome", test = "fdr")
+#' 
 
 p_adjustment <- function (study_df, 
                                      col_names,
@@ -46,18 +51,23 @@ p_adjustment <- function (study_df,
                label = NULL)
   length_dt <- nrow(study_df)
   for (ch in col_names) {
-    adj_name <- paste0(ch,".adj_",level,"_wide")
+    adj_name <- paste0(ch,".adj_",test,"_",level,"_wide")
     flog.debug(sprintf("Col being adjusted @ genomewide scale %s and Output Col - %s", ch, adj_name))
-    
+    if (adj_name %in% names(study_df)) {
+      flog.debug(sprintf("Col being adjusted already exists - %s", ch, adj_name))
+      break
+    }
     if (level == "genome") {
       study_df[, (adj_name) := p.adjust(get(ch), test, length_dt)]  
     } else if (level == "chromosome") {
       study_df[, (adj_name) := p.adjust(get(ch), test, length_dt), by = chr_no]
     }
   }
+  if (!(adj_name %in% names(study_df))) {
+    flog.debug(sprintf("Col being adjusted already exists - %s", ch, adj_name))
+    setnames(study_df, names(study_df), norm_var_names(names(study_df)))with_ids_dt <- generate_new_snp_ids(result_df)
+  }
   
-  setnames(study_df, names(study_df), norm_var_names(names(study_df)))
-
   if (!is.null(out_file_path)) {
     assert_that(is.writeable(out_file_path))
     flog.debug(sprintf("Output File path %s", out_file_path))
@@ -76,9 +86,9 @@ p_adjustment_summary <- function(df, chr_name, snp_id_name, snp_pos_name, p_val_
   
   df <- data.table(df)
   assert_that(is.data.table(df))
-  assert_that(is.numeric(df[, get(chr_name)]))
-  assert_that(is.character(df[, get(snp_id_name)]))
-  assert_that(is.numeric(df[, get(snp_pos_name)]))
+  assert_that(is.numeric(df[, get(chr_no)]))
+  assert_that(is.character(df[, get(snp_id)]))
+  assert_that(is.numeric(df[, get(snp_pos)]))
   assert_that(is.numeric(df[, get(p_val_name)]))
   
   setnames(df, c(chr_name,snp_id_name,snp_pos_name,p_val_name), c("CHR","SNP","BP","P"))
