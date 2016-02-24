@@ -10,9 +10,9 @@
 #' @param out_file_path Optional parameter. The file path to store the output.
 #' @return DataTable with additional columns for genomewide correction of each column vector
 #' 
-#' @example 
 #' 
-#' p_adjustment(study_df = with_ids_dt, col_names = "p_value", level = "chromosome", test = "fdr")
+#' 
+#' # p_adjustment(study_df = with_ids_dt, col_names = "p_value", level = "chromosome", test = "fdr")
 #' 
 
 p_adjustment <- function (study_df, 
@@ -65,7 +65,7 @@ p_adjustment <- function (study_df,
   }
   if (!(adj_name %in% names(study_df))) {
     flog.debug(sprintf("Col being adjusted already exists - %s", ch, adj_name))
-    setnames(study_df, names(study_df), norm_var_names(names(study_df)))with_ids_dt <- generate_new_snp_ids(result_df)
+    setnames(study_df, names(study_df), norm_var_names(names(study_df)))
   }
   
   if (!is.null(out_file_path)) {

@@ -2,8 +2,8 @@
 % Please edit documentation in R/get-snp-ids.r
 \name{get_snp_ids}
 \alias{get_snp_ids}
-\title{To get the Snp IDs of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele 
-using these conditions rows are joined between the two dataframes provided to this function}
+\title{Get Snp IDs of the variants found in the study dataset. 
+####TODO: ADD SOME VISUALISATION OR REPORTING OF HOW MANY SNPS WERE FOUND IN DB< HOW MANY TOTAL AND HOW MANY GENERATED"}
 \usage{
 get_snp_ids(study_df, ref_df, out_file_path = NULL)
 }
@@ -16,17 +16,19 @@ get_snp_ids(study_df, ref_df, out_file_path = NULL)
 returns a data table with all the ref. snp ids joined to each row
 }
 \description{
-To get the Snp IDs of the snps found in the study. Using columns chr_no, snp_pos, ref_allele, in alt_allele 
+Using the reference database/file and specifically columns chr_no, snp_pos in the db, 
+the variants are assigned the snp_ids and NA is added to the variants not found in the 
+database. You can use generate_new_snp_ids to get the ids of new variants foudn in your study 
 using these conditions rows are joined between the two dataframes provided to this function
 }
 \examples{
 
-combine_gwas_df <- dir_rbind("/Users/nehiljain/code/personal/genewiseR_data/raw_data/", 
-header = F,col_names = c("chr_no","snp_pos","allele","p_value"))
+# combine_gwas_df <- dir_rbind("/Users/nehiljain/code/personal/genewiseR_data/raw_data/", 
+# header = F,col_names = c("chr_no","snp_pos","allele","p_value"))
 
-ref_df <- read_tsv("~/code/personal/genewiseR_data/ref/indels.Bos_taurus.vcf", comment = "##", 
-progress = T, trim_ws = T)
-result_df <- get_snp_ids(combine_gwas_df, ref_df )
+# ref_df <- read_tsv("~/code/personal/genewiseR_data/ref/indels.Bos_taurus.vcf", comment = "##", 
+# progress = T, trim_ws = T)
+# result_df <- get_snp_ids(combine_gwas_df, ref_df )
 
 }
 

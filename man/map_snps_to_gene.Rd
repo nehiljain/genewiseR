@@ -4,12 +4,12 @@
 \alias{map_snps_to_gene}
 \title{It finds all the snps in genome that are in  gene +/- window_size}
 \usage{
-map_snps_to_gene(genome_dt, ref_dt, window_size = 1000)
+map_snps_to_gene(study_df, ref_df, window_size = 1000, out_file_path = NULL)
 }
 \arguments{
-\item{genome_dt}{: a datatable with snp information identified in the study. Should have column names - chr_no, snp_pos}
+\item{study_df}{: a datatable with snp information identified in the study. Should have column names - chr_no, snp_pos}
 
-\item{ref_dt}{: is the Bos taraus data which has gene_start, gene_end and chr_no column names}
+\item{ref_df}{: is the Bos taraus data which has gene_start, gene_end and chr_no column names}
 
 \item{window_size}{: gene start and end +/- window_size}
 }

@@ -13,15 +13,15 @@
 #' 
 #' @examples 
 #' 
-#' combine_gwas_df <- dir_rbind("../genewiseR_data/raw_data/",
-#' header = F,col_names = c("chr","pos","allele","p_value"))
+#' # combine_gwas_df <- dir_rbind("../genewiseR_data/raw_data/",
+#' #header = F,col_names = c("chr","pos","allele","p_value"))
 #' 
-#' ref_df <- read_tsv("../genewiseR_data/ref/indels.Bos_taurus.vcf", 
-#' comment = "##", progress = T, trim_ws = T, col_types = "cicccnnc")
+#' #ref_df <- read_tsv("../genewiseR_data/ref/indels.Bos_taurus.vcf", 
+#' #comment = "##", progress = T, trim_ws = T, col_types = "cicccnnc")
 #' 
-#' result_df <- get_snp_ids(combine_gwas_df, ref_df, out_file_path = "../genewiseR_data/tmp.tsv" )
+#' #result_df <- get_snp_ids(combine_gwas_df, ref_df, out_file_path = "../genewiseR_data/tmp.tsv" )
 #' 
-#' with_ids_dt <- generate_new_snp_ids(result_df)
+#' #with_ids_dt <- generate_new_snp_ids(result_df)
 
 generate_new_snp_ids <- function(study_df, 
                              prefix_str = "dal_snp") {
