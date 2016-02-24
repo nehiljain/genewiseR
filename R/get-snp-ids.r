@@ -12,12 +12,12 @@
 #' @return returns a data table with all the ref. snp ids joined to each row
 #' @examples 
 #' 
-#' combine_gwas_df <- dir_rbind("/Users/nehiljain/code/personal/genewiseR_data/raw_data/", 
-#' header = F,col_names = c("chr_no","snp_pos","allele","p_value"))
+#' # combine_gwas_df <- dir_rbind("/Users/nehiljain/code/personal/genewiseR_data/raw_data/", 
+#' # header = F,col_names = c("chr_no","snp_pos","allele","p_value"))
 #' 
-#' ref_df <- read_tsv("~/code/personal/genewiseR_data/ref/indels.Bos_taurus.vcf", comment = "##", 
-#' progress = T, trim_ws = T)
-#' result_df <- get_snp_ids(combine_gwas_df, ref_df )
+#' # ref_df <- read_tsv("~/code/personal/genewiseR_data/ref/indels.Bos_taurus.vcf", comment = "##", 
+#' # progress = T, trim_ws = T)
+#' # result_df <- get_snp_ids(combine_gwas_df, ref_df )
 #' 
 
 get_snp_ids <- function(study_df, 

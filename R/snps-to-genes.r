@@ -5,10 +5,7 @@
 #' @param ref_df : is the Bos taraus data which has gene_start, gene_end and chr_no column names
 #' @param window_size : gene start and end +/- window_size
 #' @return a dt with all snps in gene windows
-#' 
-#' @example 
-#' 
-#' 
+
 map_snps_to_gene <- function(study_df, ref_df, window_size=1000, out_file_path=NULL) {
   
   if(!data.table::is.data.table(study_df)) {
